@@ -1,4 +1,4 @@
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject, BehaviorSubject } from "rxjs";
 import { AngularFireList, AngularFireDatabase } from "angularfire2/database";
 
 export interface DbItem {
@@ -11,10 +11,15 @@ export class DbList<T extends DbItem> {
 	constructor(db: AngularFireDatabase, path: string) {
 		this.itemsRef = db.list(path);
 		// Use snapshotChanges().map() to store the key
-		this.items = this.itemsRef.snapshotChanges()
+		const items = new BehaviorSubject<T[]>([]);
+
+		this.itemsRef.snapshotChanges()
 			.map(changes => {
-				return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
-			}).share();
+				return changes.map(c => ({ ...c.payload.val(), key: c.payload.key, }));
+			}).subscribe(val => items.next(val), err => items.error(err));
+
+		this.items = items.asObservable();
+
 	}
 	public addItem(item: T): Observable<any> {
 		const subj = new Subject<any>();
@@ -25,10 +30,16 @@ export class DbList<T extends DbItem> {
 		return this.itemsRef.update(item.key, item);
 	}
 	public deleteItem(param: string | T): Promise<void> {
-		const key: string = (param as string) ? (param as string) : (param as T).key;
+		let key: string = (<T>param).key;
+		if (!key) {
+			key = <string>param;
+		}
 		return this.itemsRef.remove(key);
 	}
-	public deleteEverything(): Promise<void> {
+	public clear(): Promise<void> {
 		return this.itemsRef.remove();
+	}
+	public getItems(): Observable<T[]> {
+		return this.items.first();
 	}
 }

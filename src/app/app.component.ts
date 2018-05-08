@@ -3,6 +3,7 @@ import { AngularFireDatabase, AngularFireObject, AngularFireList } from "angular
 import { FoodItem } from "./models";
 import * as moment from "moment";
 import { Observable } from "rxjs";
+import { DbList } from "./db-list/db-list";
 
 @Component({
 	selector: "app-root",
@@ -11,9 +12,7 @@ import { Observable } from "rxjs";
 })
 export class AppComponent implements OnInit {
 
-	private dbItems: AngularFireList<FoodItem>;
-	private asyncItems: Observable<any[]>;
-	private items: FoodItem[];
+	private dbItems: DbList<FoodItem>;
 
 	constructor(
 		private readonly db: AngularFireDatabase
@@ -22,33 +21,27 @@ export class AppComponent implements OnInit {
 	}
 
 	public add(): void {
-		this.dbItems.push({
+		this.dbItems.addItem({
+			key: "",
 			goodUntil: moment(new Date()).format("YYYY/MM/DD HH:mm:ss")
 		});
 	}
 
 	public removeFirst(): void {
-		this.dbItems.remove(JSON.stringify(this.items[0]));
+		this.dbItems.items.first().subscribe(items =>
+			this.dbItems.deleteItem(items[0].key)
+		);
 	}
 
 	public clear(): void {
-		this.db.database.ref("/items").set(null);
+		this.dbItems.clear();
 	}
 
 	public ngOnInit(): void {
-		this.dbItems = this.db.list<FoodItem>("/items");
+		this.dbItems = new DbList(this.db, "/items");
 
-		this.asyncItems = this.dbItems.snapshotChanges().map(changes => {
-			console.log(changes);
-			return changes.map(c => ({ key: c.payload.key, ...c.payload.val() }));
+		this.dbItems.items.subscribe(items => {
+			console.log(items);
 		});
-		this.asyncItems.subscribe();
-
-		this.dbItems.valueChanges()
-			.subscribe(val => {
-				console.clear();
-				val.forEach(v => console.log(v));
-				this.items = val;
-			});
 	}
 }

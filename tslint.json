@@ -16,11 +16,6 @@
 		},
 		"eofline": true,
 		"forin": true,
-		"import-blacklist": [
-			true,
-			"rxjs",
-			"rxjs/Rx"
-		],
 		"import-spacing": true,
 		"indent": [
 			true,
@@ -32,7 +27,7 @@
 			true,
 			140
 		],
-		"member-access": false,
+		"member-access": [true, "check-accessor"],
 		"member-ordering": [
 			true,
 			{
@@ -86,7 +81,7 @@
 		"prefer-const": true,
 		"quotemark": [
 			true,
-			"single"
+			"double"
 		],
 		"radix": true,
 		"semicolon": [
@@ -96,6 +91,11 @@
 		"triple-equals": [
 			true,
 			"allow-null-check"
+		],
+		"typedef": [
+			true,
+			"call-signature",
+			"property-declaration"
 		],
 		"typedef-whitespace": [
 			true,
