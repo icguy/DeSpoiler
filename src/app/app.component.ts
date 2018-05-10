@@ -4,6 +4,7 @@ import { FoodItem } from "./models";
 import * as moment from "moment";
 import { Observable } from "rxjs";
 import { DbList } from "./db-list/db-list";
+import { DbFoodItem } from "./db-models";
 
 @Component({
 	selector: "app-root",
@@ -12,7 +13,7 @@ import { DbList } from "./db-list/db-list";
 })
 export class AppComponent implements OnInit {
 
-	private dbItems: DbList<FoodItem>;
+	private dbItems: DbList<DbFoodItem>;
 
 	constructor(
 		private readonly db: AngularFireDatabase
@@ -23,7 +24,9 @@ export class AppComponent implements OnInit {
 	public add(): void {
 		this.dbItems.addItem({
 			key: "",
-			goodUntil: moment(new Date()).format("YYYY/MM/DD HH:mm:ss")
+			// expires: moment(new Date()).format("YYYY/MM/DD HH:mm:ss"),
+			expires: new Date().getTime(),
+			name: "asdf"
 		});
 	}
 

@@ -6,39 +6,43 @@ export interface DbItem {
 }
 
 export class DbList<T extends DbItem> {
+
 	public itemsRef: AngularFireList<T>;
 	public items: Observable<T[]>;
+
 	constructor(db: AngularFireDatabase, path: string) {
 		this.itemsRef = db.list(path);
 		// Use snapshotChanges().map() to store the key
-		const items = new BehaviorSubject<T[]>([]);
+		const items = new BehaviorSubject<T[]>(undefined);
 
 		this.itemsRef.snapshotChanges()
-			.map(changes => {
-				return changes.map(c => ({ ...c.payload.val(), key: c.payload.key, }));
-			}).subscribe(val => items.next(val), err => items.error(err));
+			.map(changes => changes.map(c => ({ ...c.payload.val(), key: c.payload.key, })))
+			.subscribe(val => items.next(val), err => items.error(err));
 
-		this.items = items.asObservable();
-
+		this.items = items.asObservable().filter(it => it !== undefined);
 	}
+
 	public addItem(item: T): Observable<any> {
 		const subj = new Subject<any>();
 		this.itemsRef.push(item).then(val => subj.next(val), err => subj.error(err));
 		return subj;
 	}
-	public updateItem(item: T): Promise<void> {
-		return this.itemsRef.update(item.key, item);
+
+	public updateItem(item: T): Observable<void> {
+		return Observable.fromPromise(this.itemsRef.update(item.key, item));
 	}
-	public deleteItem(param: string | T): Promise<void> {
+	public deleteItem(param: string | T): Observable<void> {
 		let key: string = (<T>param).key;
 		if (!key) {
 			key = <string>param;
 		}
-		return this.itemsRef.remove(key);
+		return Observable.fromPromise(this.itemsRef.remove(key));
 	}
-	public clear(): Promise<void> {
-		return this.itemsRef.remove();
+
+	public clear(): Observable<void> {
+		return Observable.fromPromise(this.itemsRef.remove());
 	}
+
 	public getItems(): Observable<T[]> {
 		return this.items.first();
 	}
