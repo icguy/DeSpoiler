@@ -3,8 +3,8 @@ import { AngularFireDatabase, AngularFireObject, AngularFireList } from "angular
 import { FoodItem } from "./models";
 import * as moment from "moment";
 import { Observable } from "rxjs";
-import { DbList } from "./db-list/db-list";
 import { DbFoodItem } from "./db-models";
+import { FoodItemDbService } from "./food-item-db.service";
 
 @Component({
 	selector: "app-root",
@@ -13,10 +13,9 @@ import { DbFoodItem } from "./db-models";
 })
 export class AppComponent implements OnInit {
 
-	private dbItems: DbList<DbFoodItem>;
 
 	constructor(
-		private readonly db: AngularFireDatabase
+		private dbItems: FoodItemDbService
 	) {
 
 	}
@@ -41,8 +40,6 @@ export class AppComponent implements OnInit {
 	}
 
 	public ngOnInit(): void {
-		this.dbItems = new DbList(this.db, "/items");
-
 		this.dbItems.items.subscribe(items => {
 			console.log(items);
 		});

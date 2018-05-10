@@ -1,5 +1,6 @@
 import { Observable, Subject, BehaviorSubject } from "rxjs";
 import { AngularFireList, AngularFireDatabase } from "angularfire2/database";
+import { Injectable } from "@angular/core";
 
 export interface DbItem {
 	key: string;

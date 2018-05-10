@@ -2,17 +2,15 @@ import { AngularFireDatabase } from "angularfire2/database";
 import { Injectable } from "@angular/core";
 import { FoodItem } from "../../models";
 import { Observable } from "rxjs/Observable";
-import { DbList } from "../../db-list/db-list";
 import { DbFoodItem } from "../../db-models";
+import { FoodItemDbService } from "../../food-item-db.service";
 
 @Injectable()
 export class ItemListService {
-	private dbItems: DbList<DbFoodItem>;
 
 	constructor(
-		db: AngularFireDatabase
+		private dbItems: FoodItemDbService
 	) {
-		this.dbItems = new DbList(db, "/items");
 	}
 
 	public getListStream(activeOnly: boolean): Observable<FoodItem[]> {

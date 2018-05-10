@@ -8,6 +8,7 @@ import { AngularFireDatabaseModule } from "angularfire2/database";
 import { environment } from "../environments/environment";
 import { ItemListService } from "./pages/item-list/item-list.service";
 import { ItemListComponent } from "./pages/item-list/item-list.component";
+import { FoodItemDbService } from "./food-item-db.service";
 
 @NgModule({
 	declarations: [
@@ -19,7 +20,10 @@ import { ItemListComponent } from "./pages/item-list/item-list.component";
 		AngularFireModule.initializeApp(environment.firebase, "despoiler"),
 		AngularFireDatabaseModule
 	],
-	providers: [ItemListService],
+	providers: [
+		ItemListService,
+		FoodItemDbService
+	],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }

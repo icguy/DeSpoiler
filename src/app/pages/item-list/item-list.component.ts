@@ -16,7 +16,6 @@ export class ItemListComponent implements OnInit {
 
 	public ngOnInit(): void {
 		this.service.getListStream(false)
-			.do(items => console.log(items.length))
 			.subscribe(items => this.items = items);
 	}
 }
