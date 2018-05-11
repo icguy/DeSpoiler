@@ -18,4 +18,13 @@ export class ItemListComponent implements OnInit {
 		this.service.getListStream(false)
 			.subscribe(items => this.items = items);
 	}
+
+	public getExpiresText(item: FoodItem): string {
+		let days = item.expiresInDays;
+		if (days === 0)
+			return "omg expires TODAY";
+		if (days > 0)
+			return `expires in ${days} days`;
+		return `expired ${-days} days ago`;
+	}
 }

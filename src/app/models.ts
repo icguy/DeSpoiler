@@ -1,5 +1,5 @@
 export interface FoodItem {
 	key: string;
 	name: string;
-	expires: Date;
+	expiresInDays: number | undefined;
 }

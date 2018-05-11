@@ -24,7 +24,8 @@ export class AppComponent implements OnInit {
 		this.dbItems.addItem({
 			key: "",
 			// expires: moment(new Date()).format("YYYY/MM/DD HH:mm:ss"),
-			expires: new Date().getTime(),
+			// expiresOn: new Date().getTime(),
+			expiresOn: new Date().getTime() + this.randomInt(-5, 5) * 1000 * 60 * 60 * 24,
 			name: "asdf"
 		});
 	}
@@ -44,4 +45,12 @@ export class AppComponent implements OnInit {
 			console.log(items);
 		});
 	}
+
+
+
+	public randomInt(min: number, max: number): number {
+		return Math.floor(Math.random() * (max - min + 1)) + min;
+	}
+
+
 }

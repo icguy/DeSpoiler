@@ -2,7 +2,7 @@
 	<mat-card class="food-item-container">
 		<div class="text-container justify-center">
 			<span>
-				{{item.name}}, {{item.expires}}
+				{{item.name}} ({{getExpiresText(item)}})
 			</span>
 		</div>
 		<div class="icon-container justify-center">
