@@ -1,3 +1,16 @@
 <div *ngFor="let item of items">
-	{{item.name}}, {{item.expires}}
+	<mat-card class="food-item-container">
+		<div class="text-container justify-center">
+			<span>
+				{{item.name}}, {{item.expires}}
+			</span>
+		</div>
+		<div class="icon-container justify-center">
+			<button mat-icon-button>
+				<mat-icon>
+					delete
+				</mat-icon>
+			</button>
+		</div>
+	</mat-card>
 </div>

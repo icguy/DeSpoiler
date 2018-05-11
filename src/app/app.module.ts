@@ -10,6 +10,16 @@ import { ItemListService } from "./pages/item-list/item-list.service";
 import { ItemListComponent } from "./pages/item-list/item-list.component";
 import { FoodItemDbService } from "./food-item-db.service";
 
+import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+
+const materialModules = [
+	MatCardModule,
+	MatButtonModule,
+	MatIconModule
+];
+
 @NgModule({
 	declarations: [
 		AppComponent,
@@ -18,7 +28,8 @@ import { FoodItemDbService } from "./food-item-db.service";
 	imports: [
 		BrowserModule,
 		AngularFireModule.initializeApp(environment.firebase, "despoiler"),
-		AngularFireDatabaseModule
+		AngularFireDatabaseModule,
+		...materialModules
 	],
 	providers: [
 		ItemListService,

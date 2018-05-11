@@ -1,0 +1,23 @@
+.food-item-container {
+	display: flex;
+	margin: 10px;
+	padding: 10px 10px 10px 20px;
+
+	&:hover {
+		cursor: pointer;
+	}
+
+	.icon-container {
+		position: relative;
+	}
+	
+	.justify-center {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.text-container {
+		flex-grow: 1;
+	}
+}
