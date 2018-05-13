@@ -13,26 +13,45 @@ import { FoodItemDbService } from "./food-item-db.service";
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
+import { AppRoutingModule } from "./app-routing.module";
+import { ItemDetailComponent } from "./pages/item-detail/item-detail.component";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { ItemDetailService } from "./pages/item-detail/item-detail.service";
+import { MatNativeDateModule } from "@angular/material/core";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 const materialModules = [
 	MatCardModule,
 	MatButtonModule,
-	MatIconModule
+	MatIconModule,
+	MatFormFieldModule,
+	MatInputModule,
+	MatDatepickerModule,
+	MatNativeDateModule
 ];
 
 @NgModule({
 	declarations: [
 		AppComponent,
-		ItemListComponent
+		ItemListComponent,
+		ItemDetailComponent
 	],
 	imports: [
 		BrowserModule,
+		BrowserAnimationsModule,
+		FormsModule,
+		ReactiveFormsModule,
 		AngularFireModule.initializeApp(environment.firebase, "despoiler"),
 		AngularFireDatabaseModule,
+		AppRoutingModule,
 		...materialModules
 	],
 	providers: [
 		ItemListService,
+		ItemDetailService,
 		FoodItemDbService
 	],
 	bootstrap: [AppComponent]

@@ -1,16 +1,21 @@
 <div *ngFor="let item of items">
-	<mat-card class="food-item-container">
-		<div class="text-container justify-center">
-			<span>
-				{{item.name}} ({{getExpiresText(item)}})
-			</span>
-		</div>
-		<div class="icon-container justify-center">
-			<button mat-icon-button>
-				<mat-icon>
-					delete
-				</mat-icon>
-			</button>
+	<mat-card class="item-card">
+		<div class="food-item-container">
+
+			<div class="text-container justify-center">
+				<a class="" [routerLink]="getItemRoute(item)" [queryParams]="getItemQueryParams(item)">
+					<span>
+						{{item.name}} ({{getExpiresText(item)}})
+					</span>
+				</a>
+			</div>
+			<div class="icon-container justify-center">
+				<button mat-icon-button>
+					<mat-icon>
+						delete
+					</mat-icon>
+				</button>
+			</div>
 		</div>
 	</mat-card>
 </div>

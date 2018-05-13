@@ -32,6 +32,7 @@ export class DbList<T extends DbItem> {
 	public updateItem(item: T): Observable<void> {
 		return Observable.fromPromise(this.itemsRef.update(item.key, item));
 	}
+
 	public deleteItem(param: string | T): Observable<void> {
 		let key: string = (<T>param).key;
 		if (!key) {

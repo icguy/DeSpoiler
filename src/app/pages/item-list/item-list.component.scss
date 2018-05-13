@@ -1,23 +1,33 @@
-.food-item-container {
-	display: flex;
+.item-card {
 	margin: 10px;
 	padding: 10px 10px 10px 20px;
 
-	&:hover {
-		cursor: pointer;
-	}
-
-	.icon-container {
-		position: relative;
-	}
-	
-	.justify-center {
+	.food-item-container {
 		display: flex;
-		flex-direction: column;
-		justify-content: center;
+
+		&:hover {
+			cursor: pointer;
+		}
+
+		.icon-container {
+			position: relative;
+		}
+
+		.justify-center {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+
+		.text-container {
+			flex-grow: 1;
+		}
+
 	}
 
-	.text-container {
-		flex-grow: 1;
-	}
+}
+
+a {
+	color: inherit;
+	text-decoration: inherit;
 }

@@ -1,0 +1,33 @@
+<mat-card class="item-card">
+	<mat-form-field>
+		<input matInput placeholder="Name" [formControl]="form.nameControl">
+	</mat-form-field>
+
+	<mat-form-field>
+		<input matInput [matDatepicker]="picker" placeholder="Expires on" [formControl]="form.expiresOnControl">
+		<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+		<mat-datepicker #picker></mat-datepicker>
+	</mat-form-field>
+
+	<div class="buttons-container">
+		<div class="flex-empty"></div>
+
+		<button class="action-button" mat-fab color="accent" (click)="backButtonClicked()">
+			<mat-icon>
+				arrow_back
+			</mat-icon>
+		</button>
+
+		<button class="action-button" *ngIf="item && item.key" mat-fab color="primary">
+			<mat-icon>
+				delete
+			</mat-icon>
+		</button>
+
+		<button class="action-button" mat-fab color="primary">
+			<mat-icon>
+				save
+			</mat-icon>
+		</button>
+	</div>
+</mat-card>
