@@ -38,4 +38,8 @@ export class ItemListComponent implements OnInit {
 			key: item.key
 		};
 	}
+
+	public deleteButtonClicked(item: FoodItem): void {
+		this.service.removeItem(item.key).subscribe();
+	}
 }

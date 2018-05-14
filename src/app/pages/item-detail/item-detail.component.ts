@@ -21,7 +21,7 @@ export class ItemDetailComponent implements OnInit {
 		private service: ItemDetailService,
 		private route: ActivatedRoute,
 		private router: Router,
-		private fb:  FormBuilder
+		private fb: FormBuilder
 	) {
 		this.item = {
 			key: "asdf",
@@ -48,5 +48,25 @@ export class ItemDetailComponent implements OnInit {
 
 	public backButtonClicked(): void {
 		this.router.navigateByUrl("list");
+	}
+
+	public deleteButtonClicked(): void {
+		this.service.deleteItem(this.item.key).subscribe(() => this.router.navigateByUrl("list"));
+	}
+
+	public saveButtonClicked(): void {
+		if (this.item && this.item.key) {
+			this.service.updateItem({
+				...this.form.getData(),
+				key: this.item.key
+			})
+				.subscribe();
+		}
+		else {
+			this.service.createItem(this.form.getData())
+				.subscribe(result => {
+					this.item = result;
+				});
+		}
 	}
 }

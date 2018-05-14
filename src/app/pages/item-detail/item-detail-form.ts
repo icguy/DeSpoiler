@@ -1,5 +1,6 @@
 import { FormGroup, FormControl, AbstractControl, Validators, FormBuilder } from "@angular/forms";
 import { FoodItem } from "../../models";
+import * as moment from "moment";
 
 export class ItemDetailForm extends FormGroup {
 
@@ -31,7 +32,7 @@ export class ItemDetailForm extends FormGroup {
 		return {
 			key: this.originalData ? this.originalData.key : undefined,
 			name: this.nameControl.value,
-			expiresOn: this.expiresOnControl.value
+			expiresOn: moment(this.expiresOnControl.value)
 		};
 	}
 

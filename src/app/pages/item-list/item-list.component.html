@@ -2,15 +2,13 @@
 	<mat-card class="item-card">
 		<div class="food-item-container">
 
-			<div class="text-container justify-center">
-				<a class="" [routerLink]="getItemRoute(item)" [queryParams]="getItemQueryParams(item)">
-					<span>
-						{{item.name}} ({{getExpiresText(item)}})
-					</span>
-				</a>
-			</div>
+			<a class="text-container justify-center" [routerLink]="getItemRoute(item)" [queryParams]="getItemQueryParams(item)">
+				<span>
+					{{item.name}} ({{getExpiresText(item)}})
+				</span>
+			</a>
 			<div class="icon-container justify-center">
-				<button mat-icon-button>
+				<button mat-icon-button (click)="deleteButtonClicked(item)">
 					<mat-icon>
 						delete
 					</mat-icon>

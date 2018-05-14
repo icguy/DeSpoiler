@@ -18,13 +18,13 @@
 			</mat-icon>
 		</button>
 
-		<button class="action-button" *ngIf="item && item.key" mat-fab color="primary">
+		<button class="action-button" *ngIf="item && item.key" mat-fab color="primary" (click)="deleteButtonClicked()">
 			<mat-icon>
 				delete
 			</mat-icon>
 		</button>
 
-		<button class="action-button" mat-fab color="primary">
+		<button class="action-button" mat-fab color="primary" (click)="saveButtonClicked()">
 			<mat-icon>
 				save
 			</mat-icon>
