@@ -4,40 +4,40 @@ import * as moment from "moment";
 
 export class ItemDetailForm extends FormGroup {
 
-	public readonly NameControlName: string = "NAME";
-	public readonly ExpiresOnControlName: string = "EXPIRES_ON";
+	public static readonly NAME: string = "NAME";
+	public static readonly EXPIRES_ON: string = "EXPIRES_ON";
 
-	public get nameControl(): AbstractControl { return this.controls[this.NameControlName]; }
-	public get expiresOnControl(): AbstractControl { return this.controls[this.ExpiresOnControlName]; }
+	public get name(): AbstractControl { return this.controls[ItemDetailForm.NAME]; }
+	public get expiresOn(): AbstractControl { return this.controls[ItemDetailForm.EXPIRES_ON]; }
 
 	private originalData: FoodItem;
 
 	constructor(fb: FormBuilder) {
-		super({});
+		let group = fb.group({
+			[ItemDetailForm.NAME]: ["", Validators.required],
+			[ItemDetailForm.EXPIRES_ON]: ["", Validators.required]
+		});
 
-		this.controls = {
-			[this.NameControlName]: fb.control(["", Validators.required]),
-			[this.ExpiresOnControlName]: fb.control(["", Validators.required])
-		};
+		super(group.controls, group.validator, group.asyncValidator);
 	}
 
 	public setData(data: FoodItem): void {
 		this.originalData = data;
 
-		this.nameControl.setValue(data.name);
-		this.expiresOnControl.setValue(data.expiresOn.toDate());
+		this.name.setValue(data.name);
+		this.expiresOn.setValue(data.expiresOn.toDate());
 	}
 
 	public getData(): FoodItem {
 		return {
 			key: this.originalData ? this.originalData.key : undefined,
-			name: this.nameControl.value,
-			expiresOn: moment(this.expiresOnControl.value)
+			name: this.name.value,
+			expiresOn: moment(this.expiresOn.value)
 		};
 	}
 
 	public markAsUntouched(): void {
-		this.nameControl.markAsUntouched();
-		this.expiresOnControl.markAsUntouched();
+		this.name.markAsUntouched();
+		this.expiresOn.markAsUntouched();
 	}
 }

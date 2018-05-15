@@ -6,6 +6,7 @@ import { Observable } from "rxjs";
 import { ItemDetailService } from "./item-detail.service";
 import { ItemDetailForm } from "./item-detail-form";
 import { FormBuilder } from "@angular/forms";
+import { traverseControls } from "../../utils/form-helper";
 
 
 @Component({
@@ -23,12 +24,6 @@ export class ItemDetailComponent implements OnInit {
 		private router: Router,
 		private fb: FormBuilder
 	) {
-		this.item = {
-			key: "asdf",
-			expiresOn: undefined,
-			name: "asdf"
-		};
-
 		this.form = new ItemDetailForm(fb);
 	}
 
@@ -40,6 +35,7 @@ export class ItemDetailComponent implements OnInit {
 					return this.service.getItem(key);
 				return Observable.of(undefined);
 			})
+			.filter(item => item)
 			.subscribe(item => {
 				this.item = item;
 				this.form.setData(item);
@@ -55,6 +51,11 @@ export class ItemDetailComponent implements OnInit {
 	}
 
 	public saveButtonClicked(): void {
+		this.form.markAsTouched();
+		traverseControls(this.form, ctrl => ctrl.markAsTouched());
+		if (this.form.invalid)
+			return;
+
 		if (this.item && this.item.key) {
 			this.service.updateItem({
 				...this.form.getData(),
