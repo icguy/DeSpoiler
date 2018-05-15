@@ -10,7 +10,7 @@ export class ItemDetailForm extends FormGroup {
 	public get name(): AbstractControl { return this.controls[ItemDetailForm.NAME]; }
 	public get expiresOn(): AbstractControl { return this.controls[ItemDetailForm.EXPIRES_ON]; }
 
-	private originalData: FoodItem;
+	private originalData: FoodItem | undefined;
 
 	constructor(fb: FormBuilder) {
 		let group = fb.group({
@@ -30,7 +30,7 @@ export class ItemDetailForm extends FormGroup {
 
 	public getData(): FoodItem {
 		return {
-			key: this.originalData ? this.originalData.key : undefined,
+			key: this.originalData ? this.originalData.key : "",
 			name: this.name.value,
 			expiresOn: moment(this.expiresOn.value)
 		};

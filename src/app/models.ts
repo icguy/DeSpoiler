@@ -1,7 +1,7 @@
 import * as moment from "moment";
 
 export interface FoodItem {
-	key: string | undefined;
+	key: string;
 	name: string;
-	expiresOn: moment.Moment | undefined;
+	expiresOn: moment.Moment;
 }

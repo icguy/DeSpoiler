@@ -1,6 +1,6 @@
 import { AbstractControl } from "@angular/forms";
 
-export function traverseControls(control: AbstractControl, action: (AbstractControl) => void): void {
+export function traverseControls(control: AbstractControl, action: (control: AbstractControl) => void): void {
 	action(control);
 	let subControls = (<any>control).controls;
 	if (subControls) {

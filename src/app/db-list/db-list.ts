@@ -14,13 +14,15 @@ export class DbList<T extends DbItem> {
 	constructor(db: AngularFireDatabase, path: string) {
 		this.itemsRef = db.list(path);
 		// Use snapshotChanges().map() to store the key
-		const items = new BehaviorSubject<T[]>(undefined);
+		const items = new BehaviorSubject<T[] | undefined>(undefined);
 
 		this.itemsRef.snapshotChanges()
 			.map(changes => changes.map(c => ({ ...c.payload.val(), key: c.payload.key, })))
 			.subscribe(val => items.next(val), err => items.error(err));
 
-		this.items = items.asObservable().filter(it => it !== undefined);
+		this.items = items.asObservable()
+			.filter(it => it !== undefined)
+			.map(it => it!);
 	}
 
 	public addItem(item: T): Observable<any> {

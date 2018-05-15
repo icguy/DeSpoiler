@@ -35,10 +35,10 @@ export class ItemDetailComponent implements OnInit {
 					return this.service.getItem(key);
 				return Observable.of(undefined);
 			})
-			.filter(item => item)
+			.filter(item => !!item)
 			.subscribe(item => {
 				this.item = item;
-				this.form.setData(item);
+				this.form.setData(item!);
 			});
 	}
 
@@ -47,7 +47,8 @@ export class ItemDetailComponent implements OnInit {
 	}
 
 	public deleteButtonClicked(): void {
-		this.service.deleteItem(this.item.key).subscribe(() => this.router.navigateByUrl("list"));
+		if (this.item)
+			this.service.deleteItem(this.item.key).subscribe(() => this.router.navigateByUrl("list"));
 	}
 
 	public saveButtonClicked(): void {

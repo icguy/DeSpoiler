@@ -6,7 +6,7 @@ export function fromDb(item: DbFoodItem): FoodItem {
 	return {
 		name: item.name,
 		key: item.key,
-		expiresOn: item.expiresOn ? moment.unix(item.expiresOn) : undefined
+		expiresOn: moment.unix(item.expiresOn)
 	};
 }
 
@@ -14,6 +14,6 @@ export function toDb(item: FoodItem): DbFoodItem {
 	return {
 		key: item.key,
 		name: item.name,
-		expiresOn: item.expiresOn ? item.expiresOn.unix() : undefined
+		expiresOn: item.expiresOn.unix()
 	};
 }
