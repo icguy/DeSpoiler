@@ -1,3 +1,28 @@
+.header-card {
+	display: flex;
+	margin: 10px;
+	padding: 10px 10px 10px 20px;
+	position: fixed;
+	top: 0;
+	box-sizing: border-box;
+	width: calc(100% - 20px);
+	z-index: 1;
+
+	.header-left {
+		flex-grow: 1;
+	}
+
+	.header-right {
+		flex-grow: 0;
+
+		.add-button {}
+	}
+}
+
+.top-empty-space {
+	height: 70px;
+}
+
 .item-card {
 	margin: 10px;
 	padding: 10px 10px 10px 20px;

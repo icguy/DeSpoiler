@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { ItemListService } from "./item-list.service";
 import { FoodItem } from "../../models";
 import { getDaysUntil } from "../../utils/date-helper";
+import { Router } from "@angular/router";
 
 @Component({
 	selector: "app-item-list",
@@ -12,7 +13,10 @@ export class ItemListComponent implements OnInit {
 
 	public items: FoodItem[];
 
-	constructor(private service: ItemListService) {
+	constructor(
+		private service: ItemListService,
+		private router: Router
+	) {
 	}
 
 	public ngOnInit(): void {
@@ -41,5 +45,9 @@ export class ItemListComponent implements OnInit {
 
 	public deleteButtonClicked(item: FoodItem): void {
 		this.service.removeItem(item.key).subscribe();
+	}
+
+	public addButtonClicked(): void {
+		this.router.navigateByUrl("item");
 	}
 }
