@@ -3,6 +3,7 @@ import { ItemListService } from "./item-list.service";
 import { FoodItem } from "../../models";
 import { getDaysUntil } from "../../utils/date-helper";
 import { Router } from "@angular/router";
+import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 
 @Component({
 	selector: "app-item-list",
@@ -12,6 +13,7 @@ import { Router } from "@angular/router";
 export class ItemListComponent implements OnInit {
 
 	public items: FoodItem[];
+	private activeOnly: boolean = true;
 
 	constructor(
 		private service: ItemListService,
@@ -20,7 +22,7 @@ export class ItemListComponent implements OnInit {
 	}
 
 	public ngOnInit(): void {
-		this.service.getListStream(false)
+		this.service.getListStream()
 			.subscribe(items => this.items = items);
 	}
 
@@ -47,7 +49,21 @@ export class ItemListComponent implements OnInit {
 		this.service.removeItem(item.key).subscribe();
 	}
 
+	public completedButtonClicked(item: FoodItem): void {
+		this.service.completeItem(item).subscribe();
+	}
+
 	public addButtonClicked(): void {
 		this.router.navigateByUrl("item");
+	}
+
+	public onFilterChange(change: MatSlideToggleChange): void {
+		this.activeOnly = !change.checked;
+	}
+
+	public getItemsFiltered(): FoodItem[] {
+		if (this.items)
+			return this.items.filter(it => !(this.activeOnly && it.completed));
+		return [];
 	}
 }
