@@ -30,31 +30,31 @@ $header-height: 56px;
 }
 
 .item-card {
+	display: flex;
+	flex-direction: row;
 	margin: 10px;
 	min-height: 40px;
 	padding: 10px 10px 10px 20px;
 
-	.food-item-container {
+	.icon-container {
 		display: flex;
+	}
 
-		&:hover {
-			cursor: pointer;
-		}
+	.text-container {
+		flex-grow: 1;
 
-		.icon-container {
-			position: relative;
-		}
+		.item-link {
+			align-items: center;
+			display: flex;
+			flex-direction: row;
+			height: 100%;
 
-		.text-container {
-			flex-grow: 1;
+			.mat-icon {
+				width: 24px;
+				margin-right: 6px;
+			}
 		}
 	}
-}
-
-.justify-center {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
 }
 
 a {

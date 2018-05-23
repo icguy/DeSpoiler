@@ -1,6 +1,6 @@
 <mat-card class="header-card">
 	<div class="header-left">
-		<mat-slide-toggle color="primary" (change)="onFilterChange($event)">Show disposed</mat-slide-toggle>
+		<mat-slide-toggle color="primary" (change)="onFilterChange($event)">Show completed</mat-slide-toggle>
 	</div>
 	<div class="header-right">
 		<button class="add-button" mat-fab color="primary" (click)="addButtonClicked()">
@@ -14,9 +14,9 @@
 
 </div>
 <div *ngFor="let item of getItemsFiltered()">
-	<mat-card class="item-card justify-center">
-		<div class="food-item-container justify-center">
-			<a class="text-container justify-center" [routerLink]="getItemRoute(item)" [queryParams]="getItemQueryParams(item)">
+	<mat-card class="item-card">
+		<div class="text-container">
+			<a class="item-link" [routerLink]="getItemRoute(item)" [queryParams]="getItemQueryParams(item)">
 				<mat-icon *ngIf="item.completed" color="primary">
 					check_circle
 				</mat-icon>
@@ -24,14 +24,16 @@
 					{{item.name}} ({{getExpiresText(item)}})
 				</span>
 			</a>
-			<div *ngIf="!item.completed" class="icon-container justify-center">
+		</div>
+		<div class="icon-container">
+			<div *ngIf="!item.completed">
 				<button mat-icon-button (click)="deleteButtonClicked(item)">
 					<mat-icon>
 						delete
 					</mat-icon>
 				</button>
 			</div>
-			<div *ngIf="!item.completed" class="icon-container justify-center">
+			<div *ngIf="!item.completed">
 				<button mat-icon-button (click)="completedButtonClicked(item)">
 					<mat-icon>
 						done
