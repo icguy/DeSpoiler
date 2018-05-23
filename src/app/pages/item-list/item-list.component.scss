@@ -45,18 +45,16 @@ $header-height: 56px;
 			position: relative;
 		}
 
-		.justify-center {
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-		}
-
 		.text-container {
 			flex-grow: 1;
 		}
-
 	}
+}
 
+.justify-center {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 }
 
 a {

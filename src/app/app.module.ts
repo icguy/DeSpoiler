@@ -21,6 +21,7 @@ import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { ItemDetailService } from "./pages/item-detail/item-detail.service";
 import { MatNativeDateModule } from "@angular/material/core";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 
 const materialModules = [
@@ -30,7 +31,8 @@ const materialModules = [
 	MatFormFieldModule,
 	MatInputModule,
 	MatDatepickerModule,
-	MatNativeDateModule
+	MatNativeDateModule,
+	MatSlideToggleModule
 ];
 
 @NgModule({

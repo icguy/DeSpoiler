@@ -14,9 +14,8 @@
 
 </div>
 <div *ngFor="let item of getItemsFiltered()">
-	<mat-card class="item-card">
-		<div class="food-item-container">
-
+	<mat-card class="item-card justify-center">
+		<div class="food-item-container justify-center">
 			<a class="text-container justify-center" [routerLink]="getItemRoute(item)" [queryParams]="getItemQueryParams(item)">
 				<mat-icon *ngIf="item.completed" color="primary">
 					check_circle

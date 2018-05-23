@@ -26,7 +26,8 @@ export class AppComponent implements OnInit {
 			// expires: moment(new Date()).format("YYYY/MM/DD HH:mm:ss"),
 			// expiresOn: new Date().getTime(),
 			expiresOn: moment(new Date()).add(this.randomInt(-5, 5), "days").unix(),
-			name: "asdf"
+			name: "asdf",
+			completed: false
 		});
 	}
 
