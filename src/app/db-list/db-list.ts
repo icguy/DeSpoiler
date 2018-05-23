@@ -25,9 +25,9 @@ export class DbList<T extends DbItem> {
 			.map(it => it!);
 	}
 
-	public addItem(item: T): Observable<any> {
+	public addItem(item: T): Observable<string> {
 		const subj = new Subject<any>();
-		this.itemsRef.push(item).then(val => subj.next(val), err => subj.error(err));
+		this.itemsRef.push(item).then(ref => subj.next(ref.key), err => subj.error(err));
 		return subj;
 	}
 

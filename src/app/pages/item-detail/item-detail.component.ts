@@ -66,9 +66,15 @@ export class ItemDetailComponent implements OnInit {
 		}
 		else {
 			this.service.createItem(this.form.getData())
-				.subscribe(result => {
-					this.item = result;
+				.subscribe(key => {
+					console.log(key);
+					this.router.navigate(["item"], { queryParams: { "key": key } });
 				});
 		}
+	}
+
+	public completeButtonClicked(): void {
+		if (this.item)
+			this.service.completeItem(this.item).subscribe(item => this.item = item);
 	}
 }

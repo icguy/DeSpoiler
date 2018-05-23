@@ -23,11 +23,17 @@ export class ItemDetailService {
 		return this.db.deleteItem(key);
 	}
 
-	public createItem(item: FoodItem): Observable<FoodItem> {
+	public createItem(item: FoodItem): Observable<string> {
 		return this.db.addItem(toDb(item));
 	}
 
 	public updateItem(item: FoodItem): Observable<void> {
 		return this.db.updateItem(toDb(item));
+	}
+
+	public completeItem(item: FoodItem): Observable<FoodItem> {
+		let newItem: FoodItem = { ...item };
+		newItem.completed = true;
+		return this.db.updateItem(toDb(newItem)).switchMap(() => Observable.of(newItem));
 	}
 }

@@ -24,13 +24,19 @@
 			</mat-icon>
 		</button>
 
-		<button class="action-button" *ngIf="item && item.key" mat-fab color="primary" (click)="deleteButtonClicked()">
+		<button class="action-button" *ngIf="item && item.key && !item.completed" mat-fab color="primary" (click)="deleteButtonClicked()">
 			<mat-icon>
 				delete
 			</mat-icon>
 		</button>
 
-		<button class="action-button" mat-fab color="primary" (click)="saveButtonClicked()">
+		<button class="action-button" *ngIf="item && item.key && !item.completed" mat-fab color="primary" (click)="completeButtonClicked()">
+			<mat-icon>
+				done
+			</mat-icon>
+		</button>
+
+		<button class="action-button" *ngIf="!item || !item.completed" mat-fab color="primary" (click)="saveButtonClicked()">
 			<mat-icon>
 				save
 			</mat-icon>
