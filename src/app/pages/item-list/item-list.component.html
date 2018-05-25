@@ -14,7 +14,7 @@
 
 </div>
 <div *ngFor="let item of getItemsFiltered()">
-	<mat-card class="item-card">
+	<mat-card class="item-card" [ngClass]="getColorClass(item)">
 		<div class="text-container">
 			<a class="item-link" [routerLink]="getItemRoute(item)" [queryParams]="getItemQueryParams(item)">
 				<mat-icon *ngIf="item.completed" color="primary">

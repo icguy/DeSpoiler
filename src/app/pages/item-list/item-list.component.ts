@@ -4,6 +4,8 @@ import { FoodItem } from "../../models";
 import { getDaysUntil } from "../../utils/date-helper";
 import { Router } from "@angular/router";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
+import * as moment from "moment";
+import { Config } from "../../config";
 
 @Component({
 	selector: "app-item-list",
@@ -65,5 +67,28 @@ export class ItemListComponent implements OnInit {
 		if (this.items)
 			return this.items.filter(it => !(this.activeOnly && it.completed));
 		return [];
+	}
+
+	public getColorClass(item: FoodItem): any {
+		if (item.completed)
+			return {};
+		else
+			return {
+				"mod-spoiling": this.isSpoiling(item),
+				"mod-spoiled": this.isSpoiled(item)
+			};
+	}
+
+	private isSpoiling(item: FoodItem): boolean {
+		if (item) {
+			let totalLifetime = item.expiresOn.diff(item.added);
+			let currentLifetime = moment().diff(item.added);
+			return currentLifetime * 1.0 / totalLifetime > Config.SpoilingRatio;
+		}
+		return false;
+	}
+
+	private isSpoiled(item: FoodItem): boolean {
+		return item && item.expiresOn.isBefore(moment());
 	}
 }

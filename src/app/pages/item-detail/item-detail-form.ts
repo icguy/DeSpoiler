@@ -32,6 +32,7 @@ export class ItemDetailForm extends FormGroup {
 		return {
 			key: this.originalData ? this.originalData.key : "",
 			name: this.name.value,
+			added: moment(),
 			expiresOn: moment(this.expiresOn.value),
 			completed: false
 		};
