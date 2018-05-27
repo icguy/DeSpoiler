@@ -8,7 +8,6 @@ import { AngularFireDatabaseModule } from "angularfire2/database";
 import { environment } from "../environments/environment";
 import { ItemListService } from "./pages/item-list/item-list.service";
 import { ItemListComponent } from "./pages/item-list/item-list.component";
-import { FoodItemDbService } from "./food-item-db.service";
 
 import { MatCardModule } from "@angular/material/card";
 import { MatButtonModule } from "@angular/material/button";
@@ -23,6 +22,11 @@ import { ItemDetailService } from "./pages/item-detail/item-detail.service";
 import { MatNativeDateModule } from "@angular/material/core";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FoodItemDbService } from "./shared/food-item-db.service";
+import { UserDbService } from "./shared/user-db-service";
+import { AuthService } from "./shared/auth.service";
+import { LoginComponent } from "./pages/login/login.component";
+import { AuthGuard } from "./shared/auth.guard";
 
 const materialModules = [
 	MatCardModule,
@@ -39,7 +43,8 @@ const materialModules = [
 	declarations: [
 		AppComponent,
 		ItemListComponent,
-		ItemDetailComponent
+		ItemDetailComponent,
+		LoginComponent
 	],
 	imports: [
 		BrowserModule,
@@ -54,7 +59,10 @@ const materialModules = [
 	providers: [
 		ItemListService,
 		ItemDetailService,
-		FoodItemDbService
+		FoodItemDbService,
+		UserDbService,
+		AuthService,
+		AuthGuard
 	],
 	bootstrap: [AppComponent]
 })

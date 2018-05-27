@@ -7,3 +7,8 @@ export interface FoodItem {
 	expiresOn: moment.Moment;
 	completed: boolean;
 }
+
+export interface User {
+	username: string;
+	key: string;
+}

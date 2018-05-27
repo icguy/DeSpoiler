@@ -1,11 +1,10 @@
 import { AngularFireDatabase } from "angularfire2/database";
 import { Injectable } from "@angular/core";
-import { FoodItem } from "../../models";
 import { Observable } from "rxjs/Observable";
-import { DbFoodItem } from "../../db-models";
-import { FoodItemDbService } from "../../food-item-db.service";
 import * as moment from "moment";
 import { fromDb, toDb } from "../../utils/db-converter";
+import { FoodItemDbService } from "../../shared/food-item-db.service";
+import { FoodItem } from "../../shared/models";
 
 @Injectable()
 export class ItemListService {

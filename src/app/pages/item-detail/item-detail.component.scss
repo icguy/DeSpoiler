@@ -17,4 +17,10 @@
 	.mat-form-field {
 		width: 100%;
 	}
+
+	.readonly-form-field {
+		input {
+			color: black;
+		}
+	}
 }

@@ -1,10 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { AngularFireDatabase, AngularFireObject, AngularFireList } from "angularfire2/database";
-import { FoodItem } from "./models";
 import * as moment from "moment";
 import { Observable } from "rxjs";
-import { DbFoodItem } from "./db-models";
-import { FoodItemDbService } from "./food-item-db.service";
+import { FoodItemDbService } from "./shared/food-item-db.service";
 
 @Component({
 	selector: "app-root",

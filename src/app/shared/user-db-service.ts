@@ -1,14 +1,15 @@
-import { DbList } from "./db-list/db-list";
 import { DbFoodItem } from "./db-models";
 import { Injectable } from "@angular/core";
 import { AngularFireDatabase } from "angularfire2/database";
+import { DbList } from "../db-list/db-list";
+import { User } from "./models";
 
 @Injectable()
-export class FoodItemDbService extends DbList<DbFoodItem> {
+export class UserDbService extends DbList<User> {
 
 	constructor(
 		db: AngularFireDatabase
 	) {
-		super(db, "/items");
+		super(db, "/users");
 	}
 }

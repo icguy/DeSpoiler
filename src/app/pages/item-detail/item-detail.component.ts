@@ -1,12 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { FoodItemDbService } from "../../food-item-db.service";
-import { FoodItem } from "../../models";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { ItemDetailService } from "./item-detail.service";
 import { ItemDetailForm } from "./item-detail-form";
 import { FormBuilder } from "@angular/forms";
 import { traverseControls } from "../../utils/form-helper";
+import { FoodItem } from "../../shared/models";
 
 
 @Component({
@@ -60,7 +59,8 @@ export class ItemDetailComponent implements OnInit {
 		if (this.item && this.item.key) {
 			this.service.updateItem({
 				...this.form.getData(),
-				key: this.item.key
+				key: this.item.key,
+				added: this.item.added
 			})
 				.subscribe();
 		}

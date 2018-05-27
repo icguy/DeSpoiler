@@ -1,11 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { ItemListService } from "./item-list.service";
-import { FoodItem } from "../../models";
 import { getDaysUntil } from "../../utils/date-helper";
 import { Router } from "@angular/router";
 import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import * as moment from "moment";
 import { Config } from "../../config";
+import { FoodItem } from "../../shared/models";
 
 @Component({
 	selector: "app-item-list",

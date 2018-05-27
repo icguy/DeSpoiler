@@ -1,0 +1,8 @@
+<mat-card class="login-container">
+	<mat-form-field>
+		<input matInput placeholder="Username" [formControl]="usernameControl" />
+	</mat-form-field>
+	<button mat-raised-button color="primary" (click)="onLoginClicked()">
+		Login
+	</button>
+</mat-card>

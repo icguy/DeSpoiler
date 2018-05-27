@@ -15,6 +15,10 @@
 		</mat-error>
 	</mat-form-field>
 
+	<mat-form-field class="readonly-form-field">
+		<input matInput placeholder="Added" [formControl]="form.added" [disabled]="true">
+	</mat-form-field>
+
 	<div class="buttons-container">
 		<div class="flex-empty"></div>
 

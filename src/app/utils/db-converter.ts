@@ -1,6 +1,6 @@
-import { DbFoodItem } from "../db-models";
-import { FoodItem } from "../models";
 import * as moment from "moment";
+import { DbFoodItem } from "../shared/db-models";
+import { FoodItem } from "../shared/models";
 
 export function fromDb(item: DbFoodItem): FoodItem {
 	return {
