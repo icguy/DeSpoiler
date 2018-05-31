@@ -11,8 +11,8 @@ export class DbList<T extends DbItem> {
 	public itemsRef: AngularFireList<T>;
 	public items: Observable<T[]>;
 
-	constructor(db: AngularFireDatabase, path: string) {
-		this.itemsRef = db.list(path);
+	constructor(private db: AngularFireDatabase, path: string) {
+		this.itemsRef = this.db.list(path);
 		// Use snapshotChanges().map() to store the key
 		const items = new BehaviorSubject<T[] | undefined>(undefined);
 

@@ -6,6 +6,7 @@ import { MatSlideToggleChange } from "@angular/material/slide-toggle";
 import * as moment from "moment";
 import { Config } from "../../config";
 import { FoodItem } from "../../shared/models";
+import { AuthService } from "../../shared/auth.service";
 
 @Component({
 	selector: "app-item-list",
@@ -19,6 +20,7 @@ export class ItemListComponent implements OnInit {
 
 	constructor(
 		private service: ItemListService,
+		private auth: AuthService,
 		private router: Router
 	) {
 	}
@@ -57,6 +59,11 @@ export class ItemListComponent implements OnInit {
 
 	public addButtonClicked(): void {
 		this.router.navigateByUrl("item");
+	}
+
+	public logoutClicked(): void {
+		this.auth.logout();
+		location.href = "/";
 	}
 
 	public onFilterChange(change: MatSlideToggleChange): void {

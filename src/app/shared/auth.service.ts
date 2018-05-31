@@ -2,10 +2,17 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { User } from "./models";
 import { UserDbService } from "./user-db-service";
+import { Persistence } from "./persistence";
+
+const USER_KEY = "DESPOILER_USER";
 
 @Injectable()
 export class AuthService {
-	public user: User | undefined;
+	public get user(): User | undefined {
+		return this._user || Persistence.getData<User>(USER_KEY);
+	}
+
+	private _user: User | undefined;
 
 	constructor(
 		private userDb: UserDbService
@@ -24,6 +31,9 @@ export class AuthService {
 						username: username,
 						key: ""
 					});
+			})
+			.do(user => {
+				Persistence.setData(USER_KEY, user);
 			});
 	}
 
@@ -36,6 +46,7 @@ export class AuthService {
 	}
 
 	public logout(): void {
-		this.user = undefined;
+		this._user = undefined;
+		Persistence.clearData(USER_KEY);
 	}
 }

@@ -11,7 +11,6 @@ import { FoodItemDbService } from "./shared/food-item-db.service";
 })
 export class AppComponent implements OnInit {
 
-
 	constructor(
 		private dbItems: FoodItemDbService
 	) {
@@ -47,11 +46,7 @@ export class AppComponent implements OnInit {
 		});
 	}
 
-
-
 	public randomInt(min: number, max: number): number {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
-
-
 }

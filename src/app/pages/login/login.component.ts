@@ -15,14 +15,14 @@ export class LoginComponent {
 		private auth: AuthService,
 		private router: Router
 	) {
-		this.usernameControl = new FormControl("", Validators.required);
+	this.usernameControl = new FormControl("", [Validators.required, Validators.pattern(/^[A-Za-z0-9]*$/)]);
 	}
 
 	public onLoginClicked(): void {
 		this.usernameControl.markAsTouched();
 		if (this.usernameControl.valid) {
 			this.auth.login(this.usernameControl.value)
-				.subscribe(() => this.router.navigate(["/"]));
+				.subscribe(() => location.href = "/");
 		}
 	}
 }

@@ -3,9 +3,14 @@
 		<mat-slide-toggle color="primary" (change)="onFilterChange($event)">Show completed</mat-slide-toggle>
 	</div>
 	<div class="header-right">
-		<button class="add-button" mat-fab color="primary" (click)="addButtonClicked()">
+		<button class="button" mat-fab color="primary" (click)="addButtonClicked()">
 			<mat-icon>
 				add
+			</mat-icon>
+		</button>
+		<button class="button" mat-fab color="primary" (click)="logoutClicked()">
+			<mat-icon>
+				exit_to_app
 			</mat-icon>
 		</button>
 	</div>

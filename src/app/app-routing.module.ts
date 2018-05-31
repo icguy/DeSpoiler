@@ -6,9 +6,9 @@ import { AuthGuard } from "./shared/auth.guard";
 import { LoginComponent } from "./pages/login/login.component";
 
 const routes: Routes = [
-	{ path: "", redirectTo: "/list", pathMatch: "full" , canActivate: [AuthGuard] },
-	{ path: "list", component: ItemListComponent , canActivate: [AuthGuard] },
-	{ path: "item", component: ItemDetailComponent , canActivate: [AuthGuard] },
+	{ path: "", redirectTo: "/list", pathMatch: "full", canActivate: [AuthGuard] },
+	{ path: "list", component: ItemListComponent, canActivate: [AuthGuard] },
+	{ path: "item", component: ItemDetailComponent, canActivate: [AuthGuard] },
 	{ path: "login", component: LoginComponent }
 ];
 
