@@ -1,18 +1,69 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
 
+import { AppComponent } from "./app.component";
 
-import { AppComponent } from './app.component';
+import { AngularFireModule } from "angularfire2";
+import { AngularFireDatabaseModule } from "angularfire2/database";
+import { environment } from "../environments/environment";
+import { ItemListService } from "./pages/item-list/item-list.service";
+import { ItemListComponent } from "./pages/item-list/item-list.component";
 
+import { MatCardModule } from "@angular/material/card";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { AppRoutingModule } from "./app-routing.module";
+import { ItemDetailComponent } from "./pages/item-detail/item-detail.component";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { ItemDetailService } from "./pages/item-detail/item-detail.service";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { FoodItemDbService } from "./shared/food-item-db.service";
+import { UserDbService } from "./shared/user-db-service";
+import { AuthService } from "./shared/auth.service";
+import { LoginComponent } from "./pages/login/login.component";
+import { AuthGuard } from "./shared/auth.guard";
+
+const materialModules = [
+	MatCardModule,
+	MatButtonModule,
+	MatIconModule,
+	MatFormFieldModule,
+	MatInputModule,
+	MatDatepickerModule,
+	MatNativeDateModule,
+	MatSlideToggleModule
+];
 
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		ItemListComponent,
+		ItemDetailComponent,
+		LoginComponent
+	],
+	imports: [
+		BrowserModule,
+		BrowserAnimationsModule,
+		FormsModule,
+		ReactiveFormsModule,
+		AngularFireModule.initializeApp(environment.firebase, "despoiler"),
+		AngularFireDatabaseModule,
+		AppRoutingModule,
+		...materialModules
+	],
+	providers: [
+		ItemListService,
+		ItemDetailService,
+		FoodItemDbService,
+		UserDbService,
+		AuthService,
+		AuthGuard
+	],
+	bootstrap: [AppComponent]
 })
 export class AppModule { }
