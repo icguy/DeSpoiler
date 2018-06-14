@@ -63,7 +63,8 @@ export class ItemListComponent implements OnInit {
 
 	public logoutClicked(): void {
 		this.auth.logout();
-		location.href = "/";
+		const baseHref = (document.getElementsByTagName('base')[0] || {}).href || "/";
+		location.href = baseHref;
 	}
 
 	public onFilterChange(change: MatSlideToggleChange): void {

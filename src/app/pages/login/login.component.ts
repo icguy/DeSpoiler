@@ -22,7 +22,10 @@ export class LoginComponent {
 		this.usernameControl.markAsTouched();
 		if (this.usernameControl.valid) {
 			this.auth.login(this.usernameControl.value)
-				.subscribe(() => location.href = "/");
+				.subscribe(() => {
+					const baseHref = (document.getElementsByTagName('base')[0] || {}).href || "/";
+					location.href = baseHref;
+				});
 		}
 	}
 }
