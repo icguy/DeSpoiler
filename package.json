@@ -9,7 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-	"pub": "ng build --prod --base-href \"https://icguy.github.io/DeSpoiler/\""
+    "pub": "ng build --prod --base-href \"https://icguy.github.io/DeSpoiler/\"",
+    "ghp": "ngh --repo=\"https://github.com/icguy/DeSpoiler.git\" --no-silent"
   },
   "private": true,
   "dependencies": {
