@@ -16,7 +16,7 @@ export function toDb(item: FoodItem): DbFoodItem {
 	return {
 		key: item.key,
 		name: item.name,
-		added: item.expiresOn.unix(),
+		added: item.added.unix(),
 		expiresOn: item.expiresOn.unix(),
 		completed: item.completed
 	};
