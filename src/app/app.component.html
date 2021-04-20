@@ -3,3 +3,15 @@
 <div *ngFor="let item of (items | async)">
 	{{item}}
 </div>
+<div>
+	<div>
+		<label for="user">username</label>
+		<input id="user" [(ngModel)]="username">
+	</div>
+	<div>
+		<label for="pass">password</label>
+		<input id="pass" [(ngModel)]="password">
+	</div>
+	<button (click)="login()">login</button>
+	<div>{{userdata | async | json}}</div>
+</div>

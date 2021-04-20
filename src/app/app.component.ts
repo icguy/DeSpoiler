@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireDatabase, AngularFireList } from "@angular/fire/database";
 import { Observable, of } from "rxjs";
 
@@ -12,7 +13,17 @@ export class AppComponent implements OnInit {
 	list!: AngularFireList<string>;
 	items: Observable<string[]> = of([]);
 
-	constructor(private db: AngularFireDatabase) { }
+	username: string = "";
+	password: string = "";
+	userdata: Observable<any>;
+
+	constructor(
+		private db: AngularFireDatabase,
+		private auth: AngularFireAuth
+	) {
+		this.userdata = auth.user;
+		this.auth.user.subscribe((u) => console.log("user", u));
+	}
 
 	ngOnInit(): void {
 		this.list = this.db.list<string>("v2");
@@ -21,5 +32,9 @@ export class AppComponent implements OnInit {
 
 	add(text: string): void {
 		this.list.push(text);
+	}
+
+	async login(): Promise<void> {
+		await this.auth.signInWithEmailAndPassword(this.username, this.password);
 	}
 }
