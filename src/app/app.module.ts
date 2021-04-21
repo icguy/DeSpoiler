@@ -6,19 +6,31 @@ import { BrowserModule } from "@angular/platform-browser";
 import { environment } from "../environments/environment";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { ItemListComponent } from "./pages/item-list/item-list.component";
+import { LoginComponent } from "./pages/login/login.component";
+import { AuthGuard } from "./shared/auth.guard";
+import { AuthService } from "./shared/auth.service";
+import { BusyService } from "./shared/busy.service";
 
 @NgModule({
 	declarations: [
-		AppComponent
+		AppComponent,
+		LoginComponent,
+		ItemListComponent
 	],
 	imports: [
 		BrowserModule,
 		FormsModule,
+		ReactiveFormsModule,
 		AppRoutingModule,
 		AngularFireModule.initializeApp(environment.firebaseConfig),
 		AngularFireDatabaseModule
 	],
-	providers: [],
+	providers: [
+		AuthService,
+		BusyService,
+		AuthGuard
+	],
 	bootstrap: [AppComponent]
 })
 export class AppModule { }
