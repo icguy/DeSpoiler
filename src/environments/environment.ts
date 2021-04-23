@@ -5,13 +5,13 @@
 export const environment = {
 	production: false,
 	firebaseConfig: {
-		apiKey: "AIzaSyAFAUBCnrfJ5q2gG3YQuNvYPlrppW9Egeg",
-		authDomain: "despoiler-583f0.firebaseapp.com",
-		databaseURL: "https://despoiler-583f0.firebaseio.com",
-		projectId: "despoiler-583f0",
-		storageBucket: "despoiler-583f0.appspot.com",
-		messagingSenderId: "48167174818",
-		appId: "1:48167174818:web:410dcb4918ddcda2fb8dfb"
+		apiKey: "AIzaSyAjQ8JgwxsESsW0FTIL3HMmj7DSqTqkUP0",
+		authDomain: "despoiler-test.firebaseapp.com",
+		databaseURL: "https://despoiler-test-default-rtdb.europe-west1.firebasedatabase.app",
+		projectId: "despoiler-test",
+		storageBucket: "despoiler-test.appspot.com",
+		messagingSenderId: "28456551983",
+		appId: "1:28456551983:web:a1072e9103d21460ea28da"
 	}
 };
 

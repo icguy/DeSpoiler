@@ -3,6 +3,7 @@ import { AngularFireModule } from "@angular/fire";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { environment } from "../environments/environment";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -11,6 +12,8 @@ import { LoginComponent } from "./pages/login/login.component";
 import { AuthGuard } from "./shared/auth.guard";
 import { AuthService } from "./shared/auth.service";
 import { BusyService } from "./shared/busy.service";
+import { DbService } from "./shared/db.service";
+import { IconService } from "./shared/icon.service";
 
 @NgModule({
 	declarations: [
@@ -21,6 +24,7 @@ import { BusyService } from "./shared/busy.service";
 	imports: [
 		BrowserModule,
 		FormsModule,
+		FontAwesomeModule,
 		ReactiveFormsModule,
 		AppRoutingModule,
 		AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -29,7 +33,9 @@ import { BusyService } from "./shared/busy.service";
 	providers: [
 		AuthService,
 		BusyService,
-		AuthGuard
+		IconService,
+		AuthGuard,
+		DbService
 	],
 	bootstrap: [AppComponent]
 })

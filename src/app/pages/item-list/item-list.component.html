@@ -1,3 +1,34 @@
+<div class="page-header">
+	<div class="header-inner mod-menu-closed" *ngIf="!isMenuOpen">
+		<button class="btn mod-rounded" (click)="toggleMenu()">
+			<fa-icon [icon]="icons.menu"></fa-icon>
+		</button>
+		<button class="btn mod-rounded add-icon">
+			<fa-icon [icon]="icons.add" (click)="addItem()"></fa-icon>
+		</button>
+	</div>
+	<div class="header-inner mod-menu-open" *ngIf="isMenuOpen">
+		<div class="no-padding">
+			<button class="btn mod-rounded" (click)="toggleMenu()">
+				<fa-icon [icon]="icons.close"></fa-icon>
+			</button>
+		</div>
+		<div class="checkbox">
+			<input id="activeOnly" type="checkbox" [formControl]="activeOnlyControl">
+			<label for="activeOnly">Show active only</label>
+		</div>
+		<div>
+			<button class="btn btn-primary" (click)="signOut()">
+				<fa-icon [icon]="icons.signOut"></fa-icon>
+				Sign out
+			</button>
+		</div>
+	</div>
+</div>
+
+<div *ngFor="let item of (items | async)">
+	{{item | json}}
+</div>
 <!-- <mat-card class="header-card">
 	<div class="header-left">
 		<mat-slide-toggle color="primary" (change)="onFilterChange($event)">Show completed</mat-slide-toggle>

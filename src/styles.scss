@@ -13,3 +13,23 @@
 		flex: 1;
 	}
 }
+
+.checkbox {
+	label {
+		margin-left: .6rem;
+	}
+}
+
+.btn.mod-rounded {
+	border-radius: 500px;
+	margin: 5px;
+}
+
+.page-header {
+	background-color: white;
+	border-bottom: 1px solid #00000030;
+}
+
+body {
+	background-color: #f4f4f4;
+}
