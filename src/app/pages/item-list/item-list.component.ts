@@ -6,6 +6,7 @@ import { Observable, of } from "rxjs";
 import { distinctUntilChanged, map, startWith, switchMap } from "rxjs/operators";
 import { AuthService } from "../../shared/auth.service";
 import { BaseComponent } from "../../shared/base.component";
+import { BusyService } from "../../shared/busy.service";
 import { DbService, FoodItem, WithKey } from "../../shared/db.service";
 import { IconService } from "../../shared/icon.service";
 import { StorageKeys } from "../../shared/storage-keys";
@@ -37,6 +38,7 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 		public readonly icons: IconService,
 		private auth: AuthService,
 		private router: Router,
+		private busy: BusyService,
 		private db: DbService
 	) {
 		super();
@@ -75,7 +77,7 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 	}
 
 	async signOut(): Promise<void> {
-		await this.auth.logout();
+		await this.busy.do(() => this.auth.logout());
 		this.router.navigate(["/", "login"]);
 	}
 
