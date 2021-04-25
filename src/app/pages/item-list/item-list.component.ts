@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
+import * as dayjs from "dayjs";
 import { Observable, of } from "rxjs";
 import { distinctUntilChanged, map, startWith, switchMap } from "rxjs/operators";
 import { AuthService } from "../../shared/auth.service";
@@ -8,6 +9,18 @@ import { BaseComponent } from "../../shared/base.component";
 import { DbService, FoodItem, WithKey } from "../../shared/db.service";
 import { IconService } from "../../shared/icon.service";
 import { StorageKeys } from "../../shared/storage-keys";
+
+const warningRatio = 0.6;
+
+type SpoilState = "ok" | "warning" | "spoiled";
+
+interface ListItem {
+	key: string;
+	name: string;
+	isActive: boolean;
+	spoilState: SpoilState;
+	expiresText?: string;
+}
 
 @Component({
 	selector: "app-item-list",
@@ -18,7 +31,7 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 
 	public isMenuOpen = false;
 	public activeOnlyControl: FormControl;
-	public items: Observable<WithKey<FoodItem>[]> = of();
+	public items: Observable<ListItem[]> = of();
 
 	constructor(
 		public readonly icons: IconService,
@@ -40,80 +53,22 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 			startWith(this.activeOnlyControl.value),
 			switchMap(value => {
 				return this.db.getItems({ activeOnly: value }).snapshotChanges().pipe(
-					map(changes => changes.map(a => ({ key: a.payload.key!, ...a.payload.val()! }))));
+					map(changes => changes.map(a => {
+						let item = a.payload.val()!;
+						let added = dayjs(item.added);
+						let expires = dayjs(item.expires);
+						let result: ListItem = {
+							key: a.payload.key!,
+							name: item.name,
+							isActive: item.isActive,
+							spoilState: this.getSpoilState(added, expires),
+							expiresText: this.getExpiresText(expires)
+						};
+						return result;
+					})));
 			})
 		);
 	}
-
-	// public getExpiresText(item: FoodItem): string {
-	// 	let days = getDaysUntil(item.expiresOn);
-	// 	if (days === 0)
-	// 		return "omg expires TODAY";
-	// 	if (days > 0)
-	// 		return `expires in ${days} days`;
-	// 	return `expired ${-days} days ago`;
-	// }
-
-	// public getItemRoute(item: FoodItem): string {
-	// 	return `/item`;
-	// }
-
-	// public getItemQueryParams(item: FoodItem): any {
-	// 	return {
-	// 		key: item.key
-	// 	};
-	// }
-
-	// public deleteButtonClicked(item: FoodItem): void {
-	// 	this.service.removeItem(item.key).subscribe();
-	// }
-
-	// public completedButtonClicked(item: FoodItem): void {
-	// 	this.service.completeItem(item).subscribe();
-	// }
-
-	// public addButtonClicked(): void {
-	// 	this.router.navigateByUrl("item");
-	// }
-
-	// public logoutClicked(): void {
-	// 	this.auth.logout();
-	// 	const baseHref = (document.getElementsByTagName('base')[0] || {}).href || "/";
-	// 	location.href = baseHref;
-	// }
-
-	// public onFilterChange(change: MatSlideToggleChange): void {
-	// 	this.activeOnly = !change.checked;
-	// }
-
-	// public getItemsFiltered(): FoodItem[] {
-	// 	if (this.items)
-	// 		return this.items.filter(it => !(this.activeOnly && it.completed));
-	// 	return [];
-	// }
-
-	// public getColorClass(item: FoodItem): any {
-	// 	if (item.completed)
-	// 		return {};
-	// 	else
-	// 		return {
-	// 			"mod-spoiling": this.isSpoiling(item),
-	// 			"mod-spoiled": this.isSpoiled(item)
-	// 		};
-	// }
-
-	// private isSpoiling(item: FoodItem): boolean {
-	// 	if (item) {
-	// 		let totalLifetime = item.expiresOn.diff(item.added);
-	// 		let currentLifetime = moment().diff(item.added);
-	// 		return currentLifetime * 1.0 / totalLifetime > Config.SpoilingRatio;
-	// 	}
-	// 	return false;
-	// }
-
-	// private isSpoiled(item: FoodItem): boolean {
-	// 	return item && item.expiresOn.isBefore(moment());
-	// }
 
 	addItem(): void {
 		this.router.navigate(["/", "detail"]);
@@ -125,4 +80,40 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 	}
 
 	toggleMenu(): void { this.isMenuOpen = !this.isMenuOpen; }
+
+	openDetails(item: ListItem): void {
+		this.router.navigate(["/", "detail"], { queryParams: { key: item.key } });
+	}
+
+	async markComplete(item: ListItem): Promise<void> {
+		this.db.getItems().update(item.key, { isActive: false });
+	}
+
+	private getSpoilState(added: dayjs.Dayjs, expires: dayjs.Dayjs): SpoilState {
+		let now = dayjs();
+		if (expires.isBefore(now))
+			return "spoiled";
+
+		let totalLifetime = expires.diff(added);
+		let currentLifetime = now.diff(added);
+		if (currentLifetime * 1.0 / totalLifetime > warningRatio)
+			return "warning";
+
+		return "ok";
+	}
+
+	private getExpiresText(expires: dayjs.Dayjs): string {
+		let days = this.getDaysUntil(expires);
+		if (days === 0)
+			return "OMG expires TODAY";
+		if (days > 0)
+			return `expires in ${days} days`;
+		return `expired ${-days} days ago`;
+	}
+
+	private getDaysUntil(date: dayjs.Dayjs): number {
+		let originalDate = dayjs(date).startOf("day");
+		let now = dayjs().startOf("day");
+		return originalDate.diff(now, "day");
+	}
 }

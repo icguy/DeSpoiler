@@ -1,6 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
+html,
+body {
+	height: 100%;
+}
+
 .text-input {
 	display: flex;
 
@@ -16,7 +21,7 @@
 
 .checkbox {
 	label {
-		margin-left: .6rem;
+		margin-left: 0.6rem;
 	}
 }
 
@@ -25,9 +30,21 @@
 	margin: 5px;
 }
 
-.page-header {
-	background-color: white;
-	border-bottom: 1px solid #00000030;
+.page-wrapper {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.page-header {
+		background-color: white;
+		border-bottom: 1px solid #00000030;
+	}
+	
+	.page-content {
+		padding-top: 5px;
+		flex: 1;
+		overflow: auto;
+	}
 }
 
 body {

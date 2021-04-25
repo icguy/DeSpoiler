@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFireDatabase, AngularFireList, QueryFn } from "@angular/fire/database";
 
 export type WithKey<T> = T & {

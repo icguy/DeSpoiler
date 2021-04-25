@@ -20,3 +20,17 @@
 		}
 	}
 }
+
+.list-item {
+	display: flex;
+	align-items: center;
+	background-color: white;
+	margin: 0.5rem;
+	min-height: 50px;
+
+	.action {
+		flex: 1;
+		display: flex;
+		justify-content: flex-end;
+	}
+}
