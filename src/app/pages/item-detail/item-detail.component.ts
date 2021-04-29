@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { AngularFireObject } from "@angular/fire/database";
 import { ActivatedRoute, Router } from "@angular/router";
 import * as dayjs from "dayjs";
@@ -14,11 +14,12 @@ import { ItemDetailForm } from "./item-detail-form";
 	templateUrl: "./item-detail.component.html",
 	styleUrls: ["./item-detail.component.scss"]
 })
-export class ItemDetailComponent extends BaseComponent implements OnInit {
+export class ItemDetailComponent extends BaseComponent implements OnInit, OnDestroy {
 
 	private ref: AngularFireObject<FoodItem> | undefined;
 	public form: ItemDetailForm = new ItemDetailForm();
 	public itemData: FoodItem | undefined;
+	public expiresInDaysView = true;
 
 	constructor(
 		private route: ActivatedRoute,
@@ -55,6 +56,15 @@ export class ItemDetailComponent extends BaseComponent implements OnInit {
 		);
 	}
 
+	public ngOnDestroy(): void {
+		super.ngOnDestroy();
+		this.form.destroy();
+	}
+
+	public toggleExpiresInDaysView(): void {
+		this.expiresInDaysView = !this.expiresInDaysView;
+	}
+
 	public async reactivate(): Promise<void> {
 		if (this.ref) {
 			await this.busy.do(() => this.ref!.update({ isActive: true }));
@@ -78,23 +88,22 @@ export class ItemDetailComponent extends BaseComponent implements OnInit {
 		}
 
 		let formData = this.form.getData();
-		let expiresDate = formData.expires;
 		if (this.ref) {
 			await this.busy.do(() => this.ref!.update({
 				name: formData.name,
-				expires: expiresDate
+				expires: formData.expires
 			}));
 		}
 		else {
-			let key = await this.busy.do(() => this.db.createItem({
+			await this.busy.do(() => this.db.createItem({
 				name: formData.name,
 				added: dayjs().format("YYYY. MM. DD."),
-				expires: expiresDate,
+				expires: formData.expires,
 				isActive: true,
 			}));
-			console.log(key);
-			this.router.navigate(["detail"], { queryParams: { "key": key } });
 		}
+
+		this.router.navigate(["/", "list"]);
 	}
 
 	public async completeButtonClicked(): Promise<void> {

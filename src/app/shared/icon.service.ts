@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { faArrowLeft, faBars, faCheck, faExclamationTriangle, faPlus, faSave, faSignOutAlt, faTimes } from "@fortawesome/free-solid-svg-icons";
+import { faArrowLeft, faBars, faCheck, faExclamationTriangle, faPlus, faSave, faSignOutAlt, faSwatchbook, faSync, faTimes } from "@fortawesome/free-solid-svg-icons";
 
 @Injectable()
 export class IconService {
@@ -11,4 +11,5 @@ export class IconService {
 	public readonly warning = faExclamationTriangle;
 	public readonly back = faArrowLeft;
 	public readonly save = faSave;
+	public readonly swap = faSync;
 }
