@@ -88,7 +88,7 @@ export class ItemDetailComponent extends BaseComponent implements OnInit {
 		else {
 			let key = await this.busy.do(() => this.db.createItem({
 				name: formData.name,
-				added: dayjs().format("YYYY-MM-DD"),
+				added: dayjs().format("YYYY. MM. DD."),
 				expires: expiresDate,
 				isActive: true,
 			}));
