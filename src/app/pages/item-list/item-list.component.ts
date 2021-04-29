@@ -21,6 +21,7 @@ interface ListItem {
 	isActive: boolean;
 	spoilState: SpoilState;
 	expiresText?: string;
+	expires: dayjs.Dayjs;
 }
 
 @Component({
@@ -64,11 +65,13 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 							name: item.name,
 							isActive: item.isActive,
 							spoilState: this.getSpoilState(added, expires),
-							expiresText: this.getExpiresText(expires)
+							expiresText: this.getExpiresText(expires),
+							expires
 						};
 						return result;
 					})));
-			})
+			}),
+			map(list => list.sort((a, b) => a.expires.diff(b.expires)))
 		);
 	}
 

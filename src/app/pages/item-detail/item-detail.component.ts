@@ -10,6 +10,11 @@ import { DbService, FoodItem } from "../../shared/db.service";
 import { IconService } from "../../shared/icon.service";
 import { ItemDetailForm } from "./item-detail-form";
 
+interface ItemDetail {
+	isActive: boolean;
+	added: string;
+}
+
 @Component({
 	templateUrl: "./item-detail.component.html",
 	styleUrls: ["./item-detail.component.scss"]
@@ -18,7 +23,7 @@ export class ItemDetailComponent extends BaseComponent implements OnInit, OnDest
 
 	private ref: AngularFireObject<FoodItem> | undefined;
 	public form: ItemDetailForm = new ItemDetailForm();
-	public itemData: FoodItem | undefined;
+	public itemData: ItemDetail | undefined;
 	public expiresInDaysView = true;
 
 	constructor(
@@ -46,7 +51,10 @@ export class ItemDetailComponent extends BaseComponent implements OnInit, OnDest
 				map(a => a!)
 			)
 				.subscribe(item => {
-					this.itemData = item;
+					this.itemData = {
+						isActive: item.isActive,
+						added: dayjs(item.added).format("YYYY. MM. DD.")
+					};
 					this.form.setData({
 						expires: item.expires,
 						name: item.name
@@ -97,7 +105,7 @@ export class ItemDetailComponent extends BaseComponent implements OnInit, OnDest
 		else {
 			await this.busy.do(() => this.db.createItem({
 				name: formData.name,
-				added: dayjs().format("YYYY. MM. DD."),
+				added: dayjs().format("YYYY-MM-DD"),
 				expires: formData.expires,
 				isActive: true,
 			}));
