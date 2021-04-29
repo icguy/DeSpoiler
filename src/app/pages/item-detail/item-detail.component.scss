@@ -1,0 +1,18 @@
+.page-header {
+	display: flex;
+	justify-content: space-between;
+}
+
+.page-content {
+	padding: 1rem;
+}
+
+.text-input {
+	margin-bottom: 0.7rem;
+}
+
+.button-container {
+	button + button {
+		margin-left: 0.5rem;
+	}
+}

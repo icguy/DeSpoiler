@@ -1,0 +1,107 @@
+import { Component, OnInit } from "@angular/core";
+import { AngularFireObject } from "@angular/fire/database";
+import { ActivatedRoute, Router } from "@angular/router";
+import * as dayjs from "dayjs";
+import { of } from "rxjs";
+import { filter, map, switchMap } from "rxjs/operators";
+import { BaseComponent } from "../../shared/base.component";
+import { BusyService } from "../../shared/busy.service";
+import { DbService, FoodItem } from "../../shared/db.service";
+import { IconService } from "../../shared/icon.service";
+import { ItemDetailForm } from "./item-detail-form";
+
+@Component({
+	templateUrl: "./item-detail.component.html",
+	styleUrls: ["./item-detail.component.scss"]
+})
+export class ItemDetailComponent extends BaseComponent implements OnInit {
+
+	private ref: AngularFireObject<FoodItem> | undefined;
+	public form: ItemDetailForm = new ItemDetailForm();
+	public itemData: FoodItem | undefined;
+
+	constructor(
+		private route: ActivatedRoute,
+		private router: Router,
+		private busy: BusyService,
+		public icons: IconService,
+		private db: DbService
+	) {
+		super();
+	}
+
+	public ngOnInit(): void {
+		this.subscriptions.push(
+			this.route.queryParams.pipe(
+				switchMap(params => {
+					let key = params["key"];
+					if (!key) {
+						return of(undefined);
+					}
+					this.ref = this.db.getItem(key);
+					return this.ref.valueChanges();
+				}),
+				filter(item => !!item),
+				map(a => a!)
+			)
+				.subscribe(item => {
+					this.itemData = item;
+					this.form.setData({
+						expires: item.expires,
+						name: item.name
+					});
+					this.form.markAsPristine();
+				})
+		);
+	}
+
+	public async reactivate(): Promise<void> {
+		if (this.ref) {
+			await this.busy.do(() => this.ref!.update({ isActive: true }));
+		}
+	}
+
+	public back(): void {
+		this.router.navigateByUrl("list");
+	}
+
+	public async deleteItem(): Promise<void> {
+		if (this.ref) {
+			await this.busy.do(() => this.ref!.remove());
+			this.router.navigateByUrl("list");
+		}
+	}
+
+	public async save(): Promise<void> {
+		if (this.form.invalid) {
+			return;
+		}
+
+		let formData = this.form.getData();
+		let expiresDate = formData.expires;
+		if (this.ref) {
+			await this.busy.do(() => this.ref!.update({
+				name: formData.name,
+				expires: expiresDate
+			}));
+		}
+		else {
+			let key = await this.busy.do(() => this.db.createItem({
+				name: formData.name,
+				added: dayjs().format("YYYY-MM-DD"),
+				expires: expiresDate,
+				isActive: true,
+			}));
+			console.log(key);
+			this.router.navigate(["detail"], { queryParams: { "key": key } });
+		}
+	}
+
+	public async completeButtonClicked(): Promise<void> {
+		if (this.ref) {
+			await this.busy.do(() => this.ref!.update({
+				isActive: false
+			}));
+		}
+	}
+}

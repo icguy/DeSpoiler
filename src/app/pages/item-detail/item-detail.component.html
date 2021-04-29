@@ -1,0 +1,61 @@
+<div class="page-wrapper">
+	<div class="page-header">
+		<button class="btn mod-btn-icon" (click)="back()">
+			<fa-icon [icon]="icons.back"></fa-icon>
+		</button>
+		<button class="btn mod-btn-icon add-icon" *ngIf="form.dirty" (click)="save()">
+			<fa-icon [icon]="icons.save"></fa-icon>
+		</button>
+	</div>
+
+	<div class="page-content">
+		<div class="text-input">
+			<label>Name</label>
+			<input [formControl]="form.name" />
+		</div>
+		<div class="text-input">
+			<label>Expires</label>
+			<input type="date" [formControl]="form.expiresOn" />
+		</div>
+		<div *ngIf="itemData?.added" class="text-input">
+			<label>Added</label>
+			<input type="date" disabled [ngModel]="itemData?.added" />
+		</div>
+		<div class="button-container">
+			<button class="btn btn-danger" (click)="deleteItem()">Delete</button>
+			<button class="btn btn-secondary" *ngIf="itemData && !itemData.isActive" (click)="reactivate()">Reactivate</button>
+		</div>
+	</div>
+</div>
+
+
+<!-- <mat-card class="item-card">
+
+	<div class="buttons-container">
+		<div class="flex-empty"></div>
+
+		<button class="action-button" mat-fab color="accent" (click)="back()">
+			<mat-icon>
+				arrow_back
+			</mat-icon>
+		</button>
+
+		<button class="action-button" *ngIf="item && item.key && !item.completed" mat-fab color="primary" (click)="delete()">
+			<mat-icon>
+				delete
+			</mat-icon>
+		</button>
+
+		<button class="action-button" *ngIf="item && item.key && !item.completed" mat-fab color="primary" (click)="complete()">
+			<mat-icon>
+				done
+			</mat-icon>
+		</button>
+
+		<button class="action-button" *ngIf="!item || !item.completed" mat-fab color="primary" (click)="save()">
+			<mat-icon>
+				save
+			</mat-icon>
+		</button>
+	</div>
+</mat-card> -->

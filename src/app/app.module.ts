@@ -7,6 +7,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { environment } from "../environments/environment";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
+import { ItemDetailComponent } from "./pages/item-detail/item-detail.component";
 import { ItemListComponent } from "./pages/item-list/item-list.component";
 import { LoginComponent } from "./pages/login/login.component";
 import { AuthGuard } from "./shared/auth.guard";
@@ -19,7 +20,8 @@ import { IconService } from "./shared/icon.service";
 	declarations: [
 		AppComponent,
 		LoginComponent,
-		ItemListComponent
+		ItemListComponent,
+		ItemDetailComponent
 	],
 	imports: [
 		BrowserModule,
