@@ -71,7 +71,20 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 						return result;
 					})));
 			}),
-			map(list => list.sort((a, b) => a.expires.diff(b.expires)))
+			map(list => list.sort((a, b) => {
+				function getSpoilScore(item: ListItem): number {
+					switch (item.spoilState) {
+						case "spoiled": return 2;
+						case "warning": return 1;
+						default: return 0;
+					}
+				}
+				let scoreA = getSpoilScore(a);
+				let scoreB = getSpoilScore(b);
+				if (scoreA === scoreB)
+					return a.expires.diff(b.expires);
+				return scoreB - scoreA;
+			}))
 		);
 	}
 
