@@ -12,6 +12,11 @@ export interface FoodItem {
 	isActive: boolean;
 }
 
+export interface UserInfo {
+	readonly enabled: boolean;
+	notificationToken?: string;
+}
+
 @Injectable()
 export class DbService {
 	constructor(private db: AngularFireDatabase) { }
@@ -28,5 +33,11 @@ export class DbService {
 	public async createItem(data: FoodItem): Promise<string> {
 		let ref = await this.getItems().push(data);
 		return ref.key!;
+	}
+
+	public async updateNotificationToken(token: string, userId: string): Promise<void> {
+		await this.db.object<UserInfo>(`/users/${userId}`).update({
+			notificationToken: token
+		});
 	}
 }

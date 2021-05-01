@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AngularFireMessaging } from "@angular/fire/messaging";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
-import { Observable, of } from "rxjs";
-import { distinctUntilChanged, map, startWith, switchMap } from "rxjs/operators";
+import { BehaviorSubject, Observable, of } from "rxjs";
+import { distinctUntilChanged, first, map, startWith, switchMap } from "rxjs/operators";
 import { AuthService } from "../../shared/auth.service";
 import { BaseComponent } from "../../shared/base.component";
 import { BusyService } from "../../shared/busy.service";
@@ -37,6 +38,7 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 
 	constructor(
 		public readonly icons: IconService,
+		private messaging: AngularFireMessaging,
 		private auth: AuthService,
 		private router: Router,
 		private busy: BusyService,
@@ -47,6 +49,11 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 	}
 
 	public ngOnInit(): void {
+		if (this.isNotificationPermissionGranted()) {
+			// try to get token if permission is granted
+			this.subscriptions.push(this.messaging.getToken.subscribe(token => this.updateToken(token)));
+		}
+
 		this.subscriptions.push(this.activeOnlyControl.valueChanges.subscribe(value => {
 			localStorage.setItem(StorageKeys.showActiveOnly, value ? "true" : "false");
 		}));
@@ -86,6 +93,24 @@ export class ItemListComponent extends BaseComponent implements OnInit, OnDestro
 				return scoreB - scoreA;
 			}))
 		);
+	}
+
+	public isNotificationPermissionGranted(): boolean { return Notification.permission === "granted"; }
+	public async registerNotification(): Promise<void> {
+		let token = await this.messaging.requestToken.pipe(first()).toPromise();
+		await this.updateToken(token);
+	}
+
+	private async updateToken(token: string | null): Promise<void> {
+		if (token !== null) {
+			let user = await this.auth.user.pipe(first()).toPromise();
+			if (user) {
+				this.db.updateNotificationToken(token, user.uid);
+			}
+		}
+		else {
+			console.error("token is null");
+		}
 	}
 
 	addItem(): void {

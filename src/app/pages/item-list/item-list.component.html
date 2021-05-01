@@ -18,6 +18,11 @@
 				<input id="activeOnly" type="checkbox" [formControl]="activeOnlyControl">
 				<label for="activeOnly">Show active only</label>
 			</div>
+			<div class="header-item-bottom-margin" *ngIf="isNotificationPermissionGranted() === false">
+				<button class="btn btn-light" (click)="registerNotification()">
+					Subscribe to notifications
+				</button>
+			</div>
 			<div>
 				<button class="btn btn-light" (click)="signOut()">
 					<fa-icon [icon]="icons.signOut"></fa-icon>
