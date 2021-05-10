@@ -1,6 +1,7 @@
-import { AuthService } from "./auth.service";
-import { CanActivate, Router } from "@angular/router";
 import { Injectable } from "@angular/core";
+import { CanActivate, Router, UrlTree } from "@angular/router";
+import { take } from "rxjs/operators";
+import { AuthService } from "./auth.service";
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -10,10 +11,10 @@ export class AuthGuard implements CanActivate {
 	) {
 	}
 
-	public canActivate(): boolean {
-		if (this.auth.user)
+	async canActivate(): Promise<boolean | UrlTree> {
+		let user = await this.auth.user.pipe(take(1)).toPromise();
+		if (user)
 			return true;
-		this.router.navigate(["/login"]);
-		return false;
+		return this.router.createUrlTree(["/login"]);
 	}
 }

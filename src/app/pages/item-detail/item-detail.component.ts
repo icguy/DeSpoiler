@@ -1,80 +1,124 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { AngularFireObject } from "@angular/fire/database";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable } from "rxjs";
-import { ItemDetailService } from "./item-detail.service";
+import * as dayjs from "dayjs";
+import { of } from "rxjs";
+import { filter, map, switchMap } from "rxjs/operators";
+import { BaseComponent } from "../../shared/base.component";
+import { BusyService } from "../../shared/busy.service";
+import { DbService, FoodItem } from "../../shared/db.service";
+import { IconService } from "../../shared/icon.service";
 import { ItemDetailForm } from "./item-detail-form";
-import { FormBuilder } from "@angular/forms";
-import { traverseControls } from "../../utils/form-helper";
-import { FoodItem } from "../../shared/models";
 
+interface ItemDetail {
+	isActive: boolean;
+	added: string;
+}
 
 @Component({
 	templateUrl: "./item-detail.component.html",
 	styleUrls: ["./item-detail.component.scss"]
 })
-export class ItemDetailComponent implements OnInit {
+export class ItemDetailComponent extends BaseComponent implements OnInit, OnDestroy {
 
-	public item: FoodItem | undefined;
-	public form: ItemDetailForm;
+	private ref: AngularFireObject<FoodItem> | undefined;
+	public form: ItemDetailForm = new ItemDetailForm();
+	public itemData: ItemDetail | undefined;
+	public expiresInDaysView = true;
 
 	constructor(
-		private service: ItemDetailService,
 		private route: ActivatedRoute,
 		private router: Router,
-		private fb: FormBuilder
+		private busy: BusyService,
+		public icons: IconService,
+		private db: DbService
 	) {
-		this.form = new ItemDetailForm(fb);
+		super();
 	}
 
 	public ngOnInit(): void {
-		this.route.queryParams
-			.switchMap(params => {
-				let key = params["key"];
-				if (key)
-					return this.service.getItem(key);
-				return Observable.of(undefined);
-			})
-			.filter(item => !!item)
-			.subscribe(item => {
-				this.item = item;
-				this.form.setData(item!);
-			});
+		this.subscriptions.push(
+			this.route.queryParams.pipe(
+				switchMap(params => {
+					let key = params["key"];
+					if (!key) {
+						return of(undefined);
+					}
+					this.ref = this.db.getItem(key);
+					return this.ref.valueChanges();
+				}),
+				filter(item => !!item),
+				map(a => a!)
+			)
+				.subscribe(item => {
+					this.itemData = {
+						isActive: item.isActive,
+						added: dayjs(item.added).format("YYYY. MM. DD.")
+					};
+					this.form.setData({
+						expires: item.expires,
+						name: item.name
+					});
+					this.form.markAsPristine();
+				})
+		);
 	}
 
-	public backButtonClicked(): void {
+	public ngOnDestroy(): void {
+		super.ngOnDestroy();
+		this.form.destroy();
+	}
+
+	public toggleExpiresInDaysView(): void {
+		this.expiresInDaysView = !this.expiresInDaysView;
+	}
+
+	public async reactivate(): Promise<void> {
+		if (this.ref) {
+			await this.busy.do(() => this.ref!.update({ isActive: true }));
+		}
+	}
+
+	public back(): void {
 		this.router.navigateByUrl("list");
 	}
 
-	public deleteButtonClicked(): void {
-		if (this.item)
-			this.service.deleteItem(this.item.key).subscribe(() => this.router.navigateByUrl("list"));
+	public async deleteItem(): Promise<void> {
+		if (this.ref) {
+			await this.busy.do(() => this.ref!.remove());
+			this.router.navigateByUrl("list");
+		}
 	}
 
-	public saveButtonClicked(): void {
-		this.form.markAsTouched();
-		traverseControls(this.form, ctrl => ctrl.markAsTouched());
-		if (this.form.invalid)
+	public async save(): Promise<void> {
+		if (this.form.invalid) {
 			return;
+		}
 
-		if (this.item && this.item.key) {
-			this.service.updateItem({
-				...this.form.getData(),
-				key: this.item.key,
-				added: this.item.added
-			})
-				.subscribe();
+		let formData = this.form.getData();
+		if (this.ref) {
+			await this.busy.do(() => this.ref!.update({
+				name: formData.name,
+				expires: formData.expires
+			}));
 		}
 		else {
-			this.service.createItem(this.form.getData())
-				.subscribe(key => {
-					console.log(key);
-					this.router.navigate(["item"], { queryParams: { "key": key } });
-				});
+			await this.busy.do(() => this.db.createItem({
+				name: formData.name,
+				added: dayjs().format("YYYY-MM-DD"),
+				expires: formData.expires,
+				isActive: true,
+			}));
 		}
+
+		this.router.navigate(["/", "list"]);
 	}
 
-	public completeButtonClicked(): void {
-		if (this.item)
-			this.service.completeItem(this.item).subscribe(item => this.item = item);
+	public async completeButtonClicked(): Promise<void> {
+		if (this.ref) {
+			await this.busy.do(() => this.ref!.update({
+				isActive: false
+			}));
+		}
 	}
 }

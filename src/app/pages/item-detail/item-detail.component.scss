@@ -1,26 +1,20 @@
-.item-card {
-	margin: 10px;
-	padding: 20px;
+.page-header {
+	display: flex;
+	justify-content: space-between;
+}
 
-	.buttons-container {
-		display: flex;
+.page-content {
+	padding: 1rem;
+}
 
-		.action-button {
-			margin-left: 20px;
-		}
+.days-suffix {
+	margin-left: 1rem;
+}
 
-		.flex-empty {
-			flex-grow: 1;
-		}
-	}
+.button-container {
+	margin-top: 1rem;
 
-	.mat-form-field {
-		width: 100%;
-	}
-
-	.readonly-form-field {
-		input {
-			color: black;
-		}
+	button + button {
+		margin-left: 0.5rem;
 	}
 }

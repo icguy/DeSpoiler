@@ -1,72 +1,41 @@
-$header-height: 56px;
-
-.header-card {
-	box-sizing: border-box;
-	display: flex;
-	margin: 10px;
-	padding: 10px 10px 10px 20px;
-	position: fixed;
-	top: 0;
-	width: calc(100% - 20px);
-	z-index: 1;
-
-	.header-left {
-		flex-grow: 1;
-		height: $header-height;
-		line-height: $header-height;
-	}
-
-	.header-right {
-		flex-grow: 0;
-
-		.button {
-			height: $header-height;
-		}
-	}
-}
-
-.top-empty-space {
-	height: 70px;
-}
-
-.item-card {
-	display: flex;
-	flex-direction: row;
-	margin: 10px;
-	min-height: 40px;
-	padding: 10px 10px 10px 20px;
-
-	.icon-container {
+.header-inner {
+	&.mod-menu-closed {
 		display: flex;
+		justify-content: space-between;
 	}
 
-	.text-container {
-		flex-grow: 1;
+	&.mod-menu-open {
+		padding-bottom: 1rem;
 
-		.item-link {
-			align-items: center;
-			display: flex;
-			flex-direction: row;
-			height: 100%;
+		.checkbox {
+			padding-bottom: 1rem;
+		}
 
-			.mat-icon {
-				width: 24px;
-				margin-right: 6px;
+		div {
+			padding-left: 1rem;
+
+			&.no-padding {
+				padding-left: 0;
 			}
 		}
 	}
+
+	.header-item-bottom-margin {
+		margin-bottom: 1rem;
+	}
 }
 
-a {
-	color: inherit;
-	text-decoration: inherit;
-}
+.list-item {
+	display: flex;
+	align-items: center;
+	background-color: white;
+	margin: 0.5rem 0;
+	margin-left: 0.5rem;
+	min-height: 50px;
 
-.mod-spoiling {
-	background-color: #FFEB3B;
-}
-
-.mod-spoiled {
-	background-color: #BF360C;
-	color: white;
+	.action {
+		flex: 1;
+		display: flex;
+		justify-content: flex-end;
+	}
 }

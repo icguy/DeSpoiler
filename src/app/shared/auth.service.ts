@@ -1,52 +1,34 @@
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs";
-import { User } from "./models";
-import { UserDbService } from "./user-db-service";
-import { Persistence } from "./persistence";
-
-const USER_KEY = "DESPOILER_USER";
+import { AngularFireAuth } from "@angular/fire/auth";
+import auth from "firebase";
 
 @Injectable()
 export class AuthService {
-	public get user(): User | undefined {
-		return this._user || Persistence.getData<User>(USER_KEY);
-	}
 
-	private _user: User | undefined;
+	private isPersistenceSet = false;
+
+	public user = this.ngAuth.user;
 
 	constructor(
-		private userDb: UserDbService
+		private ngAuth: AngularFireAuth
 	) {
 
 	}
 
-	public login(username: string): Observable<User> {
-		return this.userDb.getItems()
-			.map(users => users.find(u => u.username === username))
-			.switchMap(user => {
-				if (user)
-					return Observable.of(user);
-				else
-					return this.create({
-						username: username,
-						key: ""
-					});
-			})
-			.do(user => {
-				Persistence.setData(USER_KEY, user);
-			});
+	async login(username: string, password: string): Promise<auth.auth.UserCredential> {
+		await this.setPersistence();
+		return this.ngAuth.signInWithEmailAndPassword(username, password);
 	}
 
-	public create(user: User): Observable<User> {
-		return this.userDb.addItem(user)
-			.map(key => ({
-				...user,
-				key: key
-			}));
+	async logout(): Promise<void> {
+		await this.setPersistence();
+		await this.ngAuth.signOut();
 	}
 
-	public logout(): void {
-		this._user = undefined;
-		Persistence.clearData(USER_KEY);
+	private async setPersistence(): Promise<void> {
+		if (!this.isPersistenceSet) {
+			await this.ngAuth.setPersistence(auth.auth.Auth.Persistence.LOCAL);
+			this.isPersistenceSet = true;
+		}
 	}
 }

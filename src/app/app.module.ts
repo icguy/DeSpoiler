@@ -1,68 +1,49 @@
-import { BrowserModule } from "@angular/platform-browser";
-import { NgModule } from "@angular/core";
-
-import { AppComponent } from "./app.component";
-
-import { AngularFireModule } from "angularfire2";
-import { AngularFireDatabaseModule } from "angularfire2/database";
-import { environment } from "../environments/environment";
-import { ItemListService } from "./pages/item-list/item-list.service";
-import { ItemListComponent } from "./pages/item-list/item-list.component";
-
-import { MatCardModule } from "@angular/material/card";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { AppRoutingModule } from "./app-routing.module";
-import { ItemDetailComponent } from "./pages/item-detail/item-detail.component";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { MatDatepickerModule } from "@angular/material/datepicker";
-import { ItemDetailService } from "./pages/item-detail/item-detail.service";
-import { MatNativeDateModule } from "@angular/material/core";
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { inject, NgModule } from "@angular/core";
+import { AngularFireModule } from "@angular/fire";
+import { AngularFireDatabaseModule } from "@angular/fire/database";
+import { AngularFireMessagingModule, VAPID_KEY } from "@angular/fire/messaging";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { FoodItemDbService } from "./shared/food-item-db.service";
-import { UserDbService } from "./shared/user-db-service";
-import { AuthService } from "./shared/auth.service";
+import { BrowserModule } from "@angular/platform-browser";
+import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
+import { environment } from "../environments/environment";
+import { AppRoutingModule } from "./app-routing.module";
+import { AppComponent } from "./app.component";
+import { ItemDetailComponent } from "./pages/item-detail/item-detail.component";
+import { ItemListComponent } from "./pages/item-list/item-list.component";
 import { LoginComponent } from "./pages/login/login.component";
 import { AuthGuard } from "./shared/auth.guard";
-
-const materialModules = [
-	MatCardModule,
-	MatButtonModule,
-	MatIconModule,
-	MatFormFieldModule,
-	MatInputModule,
-	MatDatepickerModule,
-	MatNativeDateModule,
-	MatSlideToggleModule
-];
+import { AuthService } from "./shared/auth.service";
+import { BusyService } from "./shared/busy.service";
+import { DbService } from "./shared/db.service";
+import { IconService } from "./shared/icon.service";
 
 @NgModule({
 	declarations: [
 		AppComponent,
+		LoginComponent,
 		ItemListComponent,
-		ItemDetailComponent,
-		LoginComponent
+		ItemDetailComponent
 	],
 	imports: [
 		BrowserModule,
-		BrowserAnimationsModule,
 		FormsModule,
+		FontAwesomeModule,
 		ReactiveFormsModule,
-		AngularFireModule.initializeApp(environment.firebase, "despoiler"),
-		AngularFireDatabaseModule,
 		AppRoutingModule,
-		...materialModules
+		AngularFireModule.initializeApp(environment.firebaseConfig),
+		AngularFireMessagingModule,
+		AngularFireDatabaseModule
 	],
 	providers: [
-		ItemListService,
-		ItemDetailService,
-		FoodItemDbService,
-		UserDbService,
+		{
+			provide: VAPID_KEY,
+			useValue: "BLEKb-9jgQZdfFx8ZX91IRYlSXBUpS-QxeudB90y64CAHUUnHZ_7aRII9MsmV3sZXGY4jLEKSD466r_dVCmF_X4"
+		},
 		AuthService,
-		AuthGuard
+		BusyService,
+		IconService,
+		AuthGuard,
+		DbService
 	],
 	bootstrap: [AppComponent]
 })

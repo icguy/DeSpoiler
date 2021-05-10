@@ -1,50 +1,58 @@
-<mat-card class="header-card">
-	<div class="header-left">
-		<mat-slide-toggle color="primary" (change)="onFilterChange($event)">Show completed</mat-slide-toggle>
+<div class="page-wrapper">
+	<div class="page-header">
+		<div class="header-inner mod-menu-closed" *ngIf="!isMenuOpen">
+			<button class="btn mod-btn-icon" (click)="toggleMenu()">
+				<fa-icon [icon]="icons.menu"></fa-icon>
+			</button>
+			<button class="btn mod-btn-icon add-icon">
+				<fa-icon [icon]="icons.add" (click)="addItem()"></fa-icon>
+			</button>
+		</div>
+		<div class="header-inner mod-menu-open" *ngIf="isMenuOpen">
+			<div class="no-padding">
+				<button class="btn mod-btn-icon" (click)="toggleMenu()">
+					<fa-icon [icon]="icons.close"></fa-icon>
+				</button>
+			</div>
+			<div class="checkbox">
+				<input id="activeOnly" type="checkbox" [formControl]="activeOnlyControl">
+				<label for="activeOnly">Show active only</label>
+			</div>
+			<div class="header-item-bottom-margin" *ngIf="isNotificationPermissionGranted() === false">
+				<button class="btn btn-light" (click)="registerNotification()">
+					Subscribe to notifications
+				</button>
+			</div>
+			<div>
+				<button class="btn btn-light" (click)="signOut()">
+					<fa-icon [icon]="icons.signOut"></fa-icon>
+					Sign out
+				</button>
+			</div>
+		</div>
 	</div>
-	<div class="header-right">
-		<button class="button" mat-fab color="primary" (click)="addButtonClicked()">
-			<mat-icon>
-				add
-			</mat-icon>
-		</button>
-		<button class="button" mat-fab color="primary" (click)="logoutClicked()">
-			<mat-icon>
-				exit_to_app
-			</mat-icon>
-		</button>
-	</div>
-</mat-card>
-<div class="top-empty-space">
 
-</div>
-<div *ngFor="let item of getItemsFiltered()">
-	<mat-card class="item-card" [ngClass]="getColorClass(item)">
-		<div class="text-container">
-			<a class="item-link" [routerLink]="getItemRoute(item)" [queryParams]="getItemQueryParams(item)">
-				<mat-icon *ngIf="item.completed" color="primary">
-					check_circle
-				</mat-icon>
-				<span>
-					{{item.name}} ({{getExpiresText(item)}})
-				</span>
-			</a>
-		</div>
-		<div class="icon-container">
-			<div *ngIf="!item.completed">
-				<button mat-icon-button (click)="deleteButtonClicked(item)">
-					<mat-icon>
-						delete
-					</mat-icon>
+	<div class="page-content">
+		<div class="list-item" *ngFor="let item of (items | async)">
+			<div class="name">
+				<button class="btn" (click)="openDetails(item)">
+					<span>{{item.name}}</span>
+					<span *ngIf="item.expiresText"> ({{item.expiresText}})</span>
 				</button>
 			</div>
-			<div *ngIf="!item.completed">
-				<button mat-icon-button (click)="completedButtonClicked(item)">
-					<mat-icon>
-						done
-					</mat-icon>
+			<div class="icon">
+				<fa-icon *ngIf="!item.isActive" [icon]="icons.check" class="icon-green"></fa-icon>
+				<fa-icon
+					*ngIf="item.isActive && item.spoilState !== 'ok'" [icon]="icons.warning"
+					[class.text-warning]="item.spoilState === 'warning'"
+					[class.text-danger]="item.spoilState === 'spoiled'"></fa-icon>
+			</div>
+			<div *ngIf="item.isActive" class="action">
+				<button class="btn mod-btn-icon" (click)="markComplete(item)">
+					<fa-icon [icon]="icons.check"></fa-icon>
 				</button>
 			</div>
+
 		</div>
-	</mat-card>
+	</div>
 </div>

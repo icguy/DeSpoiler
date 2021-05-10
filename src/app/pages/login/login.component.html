@@ -1,14 +1,15 @@
-<mat-card class="login-container">
-	<mat-form-field>
-		<input matInput placeholder="Username" [formControl]="usernameControl" />
-		<mat-error *ngIf="usernameControl.hasError('required')">
-			Please tell me who you are.
-		</mat-error>
-		<mat-error *ngIf="usernameControl.hasError('pattern')">
-			Usernames can contain letters and numbers only
-		</mat-error>
-	</mat-form-field>
-	<button mat-raised-button color="primary" (click)="onLoginClicked()">
-		Login
-	</button>
-</mat-card>
+<form (ngSubmit)="login()">
+	<div class="text-input">
+		<label>Email</label>
+		<input type="email" [formControl]="form.username" />
+	</div>
+	<div class="text-input">
+		<label>Password</label>
+		<input type="password" [formControl]="form.password" />
+	</div>
+	<div class="button-container">
+		<button class="btn btn-primary">
+			Login
+		</button>
+	</div>
+</form>
