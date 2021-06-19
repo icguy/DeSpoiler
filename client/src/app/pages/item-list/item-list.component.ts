@@ -3,12 +3,12 @@ import { AngularFireMessaging } from "@angular/fire/messaging";
 import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import * as dayjs from "dayjs";
-import { BehaviorSubject, Observable, of } from "rxjs";
+import { Observable, of } from "rxjs";
 import { distinctUntilChanged, first, map, startWith, switchMap } from "rxjs/operators";
 import { AuthService } from "../../shared/auth.service";
 import { BaseComponent } from "../../shared/base.component";
 import { BusyService } from "../../shared/busy.service";
-import { DbService, FoodItem, WithKey } from "../../shared/db.service";
+import { DbService } from "../../shared/db.service";
 import { IconService } from "../../shared/icon.service";
 import { StorageKeys } from "../../shared/storage-keys";
 
