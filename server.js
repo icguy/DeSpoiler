@@ -6,18 +6,29 @@ const warningRatio = 0.6;
 const maxMessageLength = 100;
 const port = 3000;
 
-
-function getCert() {
+function getSecret(envKey, fallbackLocation) {
 	try {
-		const cert = JSON.parse(process.env['cert']);
-		return cert;
+		const secret = JSON.parse(process.env[envKey]);
+		return secret;
 	}
 	catch (err) {
 	}
 
 	let fs = require("fs");
-	let certTest = JSON.parse(fs.readFileSync("./config-test.json", { encoding: "utf-8" }));
-	return certTest;
+	let fallback = JSON.parse(fs.readFileSync(fallbackLocation, { encoding: "utf-8" }));
+	return fallback;
+}
+
+function getCert() {
+	return getSecret("cert", "./cert-test.json");
+}
+
+function getConfig(cert) {
+	let config = getSecret("config", "./config-test.json")
+	return {
+		...config,
+		credential: admin.credential.cert(cert)
+	}
 }
 
 function getList(ref) {
@@ -72,13 +83,8 @@ function getNotification(list) {
 	return undefined;
 }
 
-async function processNotifications(cert) {
-	admin.initializeApp({
-		databaseURL: "https://despoiler-test-default-rtdb.europe-west1.firebasedatabase.app",
-		projectId: "despoiler-test",
-		storageBucket: "despoiler-test.appspot.com",
-		credential: admin.credential.cert(cert)
-	});
+async function processNotifications(config) {
+	admin.initializeApp(config);
 
 	let listRef = admin.database().ref("items").orderByChild("isActive").equalTo(true);
 	let list = await getList(listRef);
@@ -109,14 +115,15 @@ async function processNotifications(cert) {
 		await admin.database().ref("items").update(updates);
 		return `successfully sent ${numSuccesfullySentMessages}/${tokens.length} messages`;
 	}
-	return "no notification to send";
+	return "no notifications to send";
 }
 
 let app = express();
 
 app.get("/process", async (_, res) => {
 	let cert = getCert();
-	let result = await processNotifications(cert);
+	let config = getConfig(cert);
+	let result = await processNotifications(config);
 	res.status(200).send(result);
 });
 

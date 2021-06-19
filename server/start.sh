@@ -1,2 +1,0 @@
-yarn
-node index.js
