@@ -1,7 +1,7 @@
-import { NgModule } from "@angular/core";
+import { APP_INITIALIZER, Injectable, NgModule } from "@angular/core";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
-import { AngularFireMessagingModule, VAPID_KEY } from "@angular/fire/messaging";
+import { AngularFireMessaging, AngularFireMessagingModule, SERVICE_WORKER, VAPID_KEY } from "@angular/fire/messaging";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { BrowserModule } from "@angular/platform-browser";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -16,6 +16,22 @@ import { AuthService } from "./shared/auth.service";
 import { BusyService } from "./shared/busy.service";
 import { DbService } from "./shared/db.service";
 import { IconService } from "./shared/icon.service";
+
+@Injectable()
+export class AppInitService {
+	constructor(private messaging: AngularFireMessaging) {
+
+	}
+
+	public async init(): Promise<void> {
+		let registration = await navigator.serviceWorker.register("/DeSpoiler/firebase-messaging-sw.js");
+		await this.messaging.useServiceWorker(registration);
+	}
+}
+
+export function initApp(initService: AppInitService): () => Promise<void> {
+	return () => initService.init();
+}
 
 @NgModule({
 	declarations: [
@@ -38,7 +54,13 @@ import { IconService } from "./shared/icon.service";
 		{
 			provide: VAPID_KEY,
 			useValue: "BLEKb-9jgQZdfFx8ZX91IRYlSXBUpS-QxeudB90y64CAHUUnHZ_7aRII9MsmV3sZXGY4jLEKSD466r_dVCmF_X4"
+		},		{
+			provide: APP_INITIALIZER,
+			useFactory: initApp,
+			deps: [AppInitService],
+			multi: true
 		},
+		AppInitService,
 		AuthService,
 		BusyService,
 		IconService,
