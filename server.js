@@ -83,9 +83,7 @@ function getNotification(list) {
 	return undefined;
 }
 
-async function processNotifications(config) {
-	admin.initializeApp(config);
-
+async function processNotifications() {
 	let listRef = admin.database().ref("items").orderByChild("isActive").equalTo(true);
 	let list = await getList(listRef);
 	let notification = getNotification(list);
@@ -120,10 +118,12 @@ async function processNotifications(config) {
 
 let app = express();
 
+let cert = getCert();
+let config = getConfig(cert);
+admin.initializeApp(config);
+
 app.get("/process", async (_, res) => {
-	let cert = getCert();
-	let config = getConfig(cert);
-	let result = await processNotifications(config);
+	let result = await processNotifications();
 	res.status(200).send(result);
 });
 
