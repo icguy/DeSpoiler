@@ -1,8 +1,24 @@
 let admin = require("firebase-admin");
 let dayjs = require("dayjs");
+let express = require("express");
 
 const warningRatio = 0.6;
 const maxMessageLength = 100;
+const port = 3000;
+
+
+function getCert() {
+	try {
+		const cert = JSON.parse(process.env['cert']);
+		return cert;
+	}
+	catch (err) {
+	}
+
+	let fs = require("fs");
+	let certTest = JSON.parse(fs.readFileSync("./config-test.json", { encoding: "utf-8" }));
+	return certTest;
+}
 
 function getList(ref) {
 	function normalizeList(objList) {
@@ -56,10 +72,7 @@ function getNotification(list) {
 	return undefined;
 }
 
-async function main() {
-	let fs = require("fs");
-	let cert = JSON.parse(fs.readFileSync("./config-test.json", {encoding: "utf-8"}));
-
+async function processNotifications(cert) {
 	admin.initializeApp({
 		databaseURL: "https://despoiler-test-default-rtdb.europe-west1.firebasedatabase.app",
 		projectId: "despoiler-test",
@@ -75,7 +88,8 @@ async function main() {
 		let users = await getList(usersRef);
 		let tokens = users
 			.map(a => a.notificationToken)
-			.filter(a => !!a)
+			.filter(a => !!a);
+		let numSuccesfullySentMessages = 0;
 		if (tokens.length > 0) {
 			console.log(`sending messages to ${tokens.length} devices...`)
 			let resp = await admin.messaging().sendMulticast({
@@ -86,14 +100,26 @@ async function main() {
 				tokens
 			});
 			console.log(`sent ${resp.successCount} messages`);
+			numSuccesfullySentMessages = resp.successCount;
 		}
 		let updates = {};
 		for (let item of notification.items) {
 			updates[`${item.key}/lastNotification`] = item.spoilState;
 		}
 		await admin.database().ref("items").update(updates);
+		return `successfully sent ${numSuccesfullySentMessages}/${tokens.length} messages`;
 	}
-	console.log("done");
+	return "no notification to send";
 }
 
-main();
+let app = express();
+
+app.get("/process", async (_, res) => {
+	let cert = getCert();
+	let result = await processNotifications(cert);
+	res.status(200).send(result);
+});
+
+app.listen(port, () => {
+	console.log(`server started on port ${port}`);
+});
