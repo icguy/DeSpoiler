@@ -8,5 +8,6 @@ export const environment = {
 		storageBucket: "despoiler-583f0.appspot.com",
 		messagingSenderId: "48167174818",
 		appId: "1:48167174818:web:410dcb4918ddcda2fb8dfb"
-	}
+	},
+	fcmVapidKey: "BCyc2Vj_2n4mvQhRYAbsAbzChaNTB_pGUDGn3WBSqIehi6JfIZm8vyu5iypnTA1w9LUccmAUXW-PBNIjSSHUVrg"
 };
