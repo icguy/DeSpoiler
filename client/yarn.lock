@@ -4789,7 +4789,7 @@ firebase-tools@^8.0.0:
     winston "^3.0.0"
     ws "^7.2.3"
 
-firebase@*, "firebase@^7.0 || ^8.0":
+firebase@*, firebase@8.4.1:
   version "8.4.1"
   resolved "https://registry.yarnpkg.com/firebase/-/firebase-8.4.1.tgz#2e1794157e7548c11cd42a086c476f603fc8b66e"
   integrity sha512-PMDt9iU8ry5P7PSrGQ+72O1gkfa5rNAeybMZhP22nKOh40sVozSkcKGZAFumXog7tjlslHJhUEZgfZbKCNkC8Q==
