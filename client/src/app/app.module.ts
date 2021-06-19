@@ -53,8 +53,9 @@ export function initApp(initService: AppInitService): () => Promise<void> {
 	providers: [
 		{
 			provide: VAPID_KEY,
-			useValue: "BLEKb-9jgQZdfFx8ZX91IRYlSXBUpS-QxeudB90y64CAHUUnHZ_7aRII9MsmV3sZXGY4jLEKSD466r_dVCmF_X4"
-		},		{
+			useValue: environment.fcmVapidKey
+		},
+		{
 			provide: APP_INITIALIZER,
 			useFactory: initApp,
 			deps: [AppInitService],
