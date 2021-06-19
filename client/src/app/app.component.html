@@ -1,0 +1,7 @@
+<div *ngIf="busy.isBusy | async" class="progress-overlay">
+	<div class="progress">
+		<div class="progress-bar progress-bar-animated progress-bar-striped"></div>
+	</div>
+</div>
+
+<router-outlet></router-outlet>

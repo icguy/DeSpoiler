@@ -1,0 +1,58 @@
+<div class="page-wrapper">
+	<div class="page-header">
+		<div class="header-inner mod-menu-closed" *ngIf="!isMenuOpen">
+			<button class="btn mod-btn-icon" (click)="toggleMenu()">
+				<fa-icon [icon]="icons.menu"></fa-icon>
+			</button>
+			<button class="btn mod-btn-icon add-icon">
+				<fa-icon [icon]="icons.add" (click)="addItem()"></fa-icon>
+			</button>
+		</div>
+		<div class="header-inner mod-menu-open" *ngIf="isMenuOpen">
+			<div class="no-padding">
+				<button class="btn mod-btn-icon" (click)="toggleMenu()">
+					<fa-icon [icon]="icons.close"></fa-icon>
+				</button>
+			</div>
+			<div class="checkbox">
+				<input id="activeOnly" type="checkbox" [formControl]="activeOnlyControl">
+				<label for="activeOnly">Show active only</label>
+			</div>
+			<div class="header-item-bottom-margin" *ngIf="isNotificationPermissionGranted() === false">
+				<button class="btn btn-light" (click)="registerNotification()">
+					Subscribe to notifications
+				</button>
+			</div>
+			<div>
+				<button class="btn btn-light" (click)="signOut()">
+					<fa-icon [icon]="icons.signOut"></fa-icon>
+					Sign out
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="page-content">
+		<div class="list-item" *ngFor="let item of (items | async)">
+			<div class="name">
+				<button class="btn" (click)="openDetails(item)">
+					<span>{{item.name}}</span>
+					<span *ngIf="item.expiresText"> ({{item.expiresText}})</span>
+				</button>
+			</div>
+			<div class="icon">
+				<fa-icon *ngIf="!item.isActive" [icon]="icons.check" class="icon-green"></fa-icon>
+				<fa-icon
+					*ngIf="item.isActive && item.spoilState !== 'ok'" [icon]="icons.warning"
+					[class.text-warning]="item.spoilState === 'warning'"
+					[class.text-danger]="item.spoilState === 'spoiled'"></fa-icon>
+			</div>
+			<div *ngIf="item.isActive" class="action">
+				<button class="btn mod-btn-icon" (click)="markComplete(item)">
+					<fa-icon [icon]="icons.check"></fa-icon>
+				</button>
+			</div>
+
+		</div>
+	</div>
+</div>

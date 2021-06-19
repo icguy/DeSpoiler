@@ -1,0 +1,68 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "imports.scss";
+@import "../../node_modules/bootstrap/scss/bootstrap.scss";
+
+html,
+body {
+	height: 100%;
+	background-color: white;
+}
+
+.text-input {
+	display: flex;
+	align-items: center;
+
+	label {
+		flex: 0;
+		min-width: 120px;
+		margin-bottom: 0;
+	}
+
+	input {
+		flex: 1;
+		min-width: 30px;
+	}
+}
+
+.checkbox {
+	display: flex;
+	align-items: center;
+
+	label {
+		margin-left: 0.6rem;
+		margin-bottom: 0;
+	}
+}
+
+.btn.mod-btn-icon {
+	border-radius: 500px;
+	margin: 5px;
+	font-size: 1.4rem;
+
+	@include displayMd {
+		font-size: 1rem;
+	}
+}
+
+.page-wrapper {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+
+	.page-header {
+		background-color: $primary;
+		color: white;
+		border-bottom: 1px solid #00000030;
+
+		.btn.btn.mod-btn-icon {
+			color: white;
+		}
+	}
+
+	.page-content {
+		padding-top: 5px;
+		flex: 1;
+		overflow: auto;
+	}
+}
