@@ -1,4 +1,4 @@
-import { inject, NgModule } from "@angular/core";
+import { NgModule } from "@angular/core";
 import { AngularFireModule } from "@angular/fire";
 import { AngularFireDatabaseModule } from "@angular/fire/database";
 import { AngularFireMessagingModule, VAPID_KEY } from "@angular/fire/messaging";
