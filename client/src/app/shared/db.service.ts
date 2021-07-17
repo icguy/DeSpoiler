@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { AngularFireDatabase, AngularFireList, AngularFireObject, QueryFn } from "@angular/fire/database";
+import { first } from "rxjs/operators";
 
 export type WithKey<T> = T & {
 	key: string;
@@ -14,7 +15,7 @@ export interface FoodItem {
 
 export interface UserInfo {
 	readonly enabled: boolean;
-	notificationToken?: string;
+	notificationTokens?: string[];
 }
 
 @Injectable()
@@ -36,8 +37,10 @@ export class DbService {
 	}
 
 	public async updateNotificationToken(token: string, userId: string): Promise<void> {
-		await this.db.object<UserInfo>(`/users/${userId}`).update({
-			notificationToken: token
-		});
+		let tokensList = await this.db.list<string>(`/users/${userId}/notificationTokens`);
+		let tokens = await tokensList.valueChanges().pipe(first()).toPromise();
+		if(!tokens.includes(token)) {
+			await tokensList.push(token);
+		}
 	}
 }
