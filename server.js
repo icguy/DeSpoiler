@@ -91,7 +91,7 @@ async function processNotifications() {
 		let usersRef = admin.database().ref("users");
 		let users = await getList(usersRef);
 		let tokens = users
-			.map(a => a.notificationToken)
+			.flatMap(a => Object.values(a.notificationTokens || {}))
 			.filter(a => !!a);
 		let numSuccesfullySentMessages = 0;
 		if (tokens.length > 0) {
