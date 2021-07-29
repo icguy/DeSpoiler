@@ -33,6 +33,8 @@ function getConfig(cert) {
 
 function getList(ref) {
 	function normalizeList(objList) {
+		if(!objList)
+			return [];
 		return Object.keys(objList).map(k => ({ key: k, ...objList[k] }))
 	}
 
